@@ -1,5 +1,6 @@
 /* ************************************************************************** */
-/** 
+/** Descriptive File Name
+
   @Company
     Kettering University
 
@@ -13,29 +14,19 @@
     This header file defines the I/O pins used by the switches and LEDs interfacing
     circuit, and provides the function prototypes.
   @Author
-    Girma Tewolde
-  @Last modification
-    09/09/2020 @ 6:24 PM
+    Girma Tewolde and Trevor Arcieri
+ 
  */
 /* ************************************************************************** */
 
 #ifndef _SWsLEDs__H    /* Guard against multiple inclusion */
 #define _SWsLEDs__H
 
-#include <xc.h>
-#include <stdbool.h>
-
-/* Provide C++ Compatibility */
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #define CPU_FREQ    80000000
 #define ONE_SEC_TICKS (CPU_FREQ/2)
     
-//buttons BTNL and BTNU share functions with PGD and PGC signals for programming
+//Buttons BTNL and BTNU share functions with PGD and PGC signals for programming
 //the following line should be inserted in the code, to disable their programming function
-//#pragma config JTAGEN = OFF    
 
 //port configuration values for input & output    
 #define IN      1       
@@ -104,9 +95,8 @@ void writeLED(unsigned char index, unsigned char val);
 //time delay functions    
 void msDelay(unsigned int ms);
 
-/* Provide C++ Compatibility */
-#ifdef __cplusplus
-}
-#endif
-
 #endif /* _SWsLEDs__H */
+
+/* *****************************************************************************
+ End of File
+ */

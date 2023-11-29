@@ -17,24 +17,15 @@
     Use #include "lcd.h" in the source files where the functions are needed.
 
   @Author
-    Digilent (edited by Girma Tewolde)
+    Digilent (Edited by Girma Tewolde and Trevor Arcieri)
  
-  @Last modification
-    10/03/2020 @ 11:44 AM 
  */
 /* ************************************************************************** */
 
 #ifndef _LCD_H    /* Guard against multiple inclusion */
 #define _LCD_H
 
-//#include <xc.h>
-
-/* Provide C++ Compatibility */
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-//define CPU clock frequency and core timer ticks for one second
+//Define CPU clock frequency and core timer ticks for one second
 #define CPU_FREQ    80000000
 #define ONE_SEC_TICKS (CPU_FREQ/2)    
 
@@ -118,13 +109,6 @@ void LCD_ConfigurePins();
 
 //utility function for small time delay
 void DelayAprox10Us( unsigned int tusDelay );
-
-/* Provide C++ Compatibility */
-#ifdef __cplusplus
-}
-#endif
-
-#endif /* _LCD_H */
 
 /* *****************************************************************************
  End of File

@@ -46,7 +46,7 @@ float fGRangeLSB;   // global variable used to pre-compute the value in g corres
 **	Description:
 **		This function initializes the hardware involved in the ACL module: 
 **      the I2C1 module of PIC32 is configured to work at 400 khz, 
-**      the ACL is initialized at ±2g full scale range and 
+**      the ACL is initialized at ï¿½2g full scale range and 
 **      the ACL_INT2 pin is configured as digital input.
 **          
 */

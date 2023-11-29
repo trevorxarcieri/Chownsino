@@ -5,7 +5,7 @@
     Digilent Inc
 
    @Author
-     Richard Wall
+     Richard Wall (Edited by Trevor Arcieri)
 
    @Date
      Created: March 8, 2017
@@ -26,10 +26,6 @@
     #define _CONFIG_BITS_H
 
     // PIC32MX370F512L Configuration Bit Settings
-
-    // 'C' source line config statements
-
-    #include <xc.h>
 
     // DEVCFG3
     // USERID = No Setting

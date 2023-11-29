@@ -13,10 +13,8 @@
         Include the file in the project when the AIC and MIC libraries are needed.
   
   @Author
-    Digilent (edited by Girma Tewolde)
+    Digilent (Edited by Girma Tewolde and Trevor Arcieri)
  
-  @Last modification
-    10/03/2020 @ 11:44 AM 
  */
 /* ************************************************************************** */
 
@@ -27,32 +25,14 @@
 #define tris_ADC_AN2    TRISBbits.TRISB2
 #define ansel_ADC_AN2   ANSELBbits.ANSB2
 
-//potentiometer functions
+//Potentiometer functions
 void potInit();
 unsigned int potReadVal();
 void potConfigPins();
 
-//ACD functions
+//ADC functions
 void ADC_Init();
 unsigned int ADC_AnalogRead(unsigned char analogPIN);
-//#ifdef __cplusplus
-//extern "C" {
-//#endif
-
-
-
-    // *****************************************************************************
-    // *****************************************************************************
-    // Section: Interface Functions
-    // *****************************************************************************
-    // *****************************************************************************
-
-
-
-    /* Provide C++ Compatibility */
-//#ifdef __cplusplus
-//}
-//#endif
 #endif /* _ADC_H */
 
 /* *****************************************************************************
