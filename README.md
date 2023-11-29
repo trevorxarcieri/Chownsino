@@ -1,7 +1,7 @@
 ﻿# Chownsino
 ## Authors
  - Trevor Arcieri (https://github.com/trevorxarcieri)
- - Nicholas Chown
+ - Nicholas Chown (https://github.com/nickc02)
 ## Summary
 This is a virtual casino game implemented on a Basys Mx3 board containing a PIC32 MCU. The project is meant to demonstrate our understanding of embedded concepts and apply them to a useful application.
 ## System Overview
