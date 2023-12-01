@@ -110,6 +110,8 @@ void LCD_ConfigurePins();
 //utility function for small time delay
 void DelayAprox10Us( unsigned int tusDelay );
 
+#endif
+
 /* *****************************************************************************
  End of File
  */

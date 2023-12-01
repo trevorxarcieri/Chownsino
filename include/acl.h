@@ -53,6 +53,8 @@ unsigned char I2C_Read(unsigned char slaveAddress,
                     unsigned char* dataBuffer,
                     unsigned char bytesNumber);
 
+#endif
+
 /* *****************************************************************************
  End of File
  */

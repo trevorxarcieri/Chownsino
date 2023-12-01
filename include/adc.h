@@ -33,6 +33,7 @@ void potConfigPins();
 //ADC functions
 void ADC_Init();
 unsigned int ADC_AnalogRead(unsigned char analogPIN);
+
 #endif /* _ADC_H */
 
 /* *****************************************************************************

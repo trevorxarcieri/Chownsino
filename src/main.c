@@ -7,5 +7,6 @@
 int main(int argc, char** argv) 
 {
     startCasino();
+    while(true);
     return 1;
 }
