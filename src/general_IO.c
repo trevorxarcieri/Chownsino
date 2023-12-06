@@ -20,7 +20,6 @@
 /* ************************************************************************** */
 
 #include "general_IO.h"
-#include "time.h"
 
 //initialize all switches as inputs
 //switches (SW0..SW7)are attached to the PIC32 GPIO pins 

@@ -1,0 +1,21 @@
+{
+  "files.associations": {
+    "pmodoledrgb.h": "c",
+    "chrfont0.h": "c",
+    "acl.h": "c",
+    "adc.h": "c",
+    "balance.h": "c",
+    "card.h": "c",
+    "cards.h": "c",
+    "general_io.h": "c",
+    "i2c.h": "c",
+    "keypad1.h": "c",
+    "lcd.h": "c",
+    "randomization.h": "c",
+    "uart.h": "c",
+    "xc.h": "c",
+    "stdlib.h": "c",
+    "attribs.h": "c",
+    "sleep.h": "c"
+  }
+}

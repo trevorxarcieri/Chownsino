@@ -1,7 +1,6 @@
 
 /***************************** Include Files *******************************/
 #include "PmodOLEDrgb.h"
-#include "xparameters.h"
 #include "stdio.h"
 #include "xil_io.h"
 
@@ -37,24 +36,24 @@ XStatus PMODOLEDRGB_Reg_SelfTest(void * baseaddr_p)
 
 	baseaddr = (u32) baseaddr_p;
 
-	xil_printf("******************************\n\r");
-	xil_printf("* User Peripheral Self Test\n\r");
-	xil_printf("******************************\n\n\r");
+	// xil_printf("******************************\n\r");
+	// xil_printf("* User Peripheral Self Test\n\r");
+	// xil_printf("******************************\n\n\r");
 
 	/*
 	 * Write to user logic slave module register(s) and read back
 	 */
-	xil_printf("User logic slave module test...\n\r");
+	// xil_printf("User logic slave module test...\n\r");
 
 	for (write_loop_index = 0 ; write_loop_index < 4; write_loop_index++)
 	  PMODOLEDRGB_mWriteReg (baseaddr, write_loop_index*4, (write_loop_index+1)*READ_WRITE_MUL_FACTOR);
 	for (read_loop_index = 0 ; read_loop_index < 4; read_loop_index++)
 	  if ( PMODOLEDRGB_mReadReg (baseaddr, read_loop_index*4) != (read_loop_index+1)*READ_WRITE_MUL_FACTOR){
-	    xil_printf ("Error reading register value at address %x\n", (int)baseaddr + read_loop_index*4);
+	    // xil_printf ("Error reading register value at address %x\n", (int)baseaddr + read_loop_index*4);
 	    return XST_FAILURE;
 	  }
 
-	xil_printf("   - slave register write/read passed\n\n\r");
+	// xil_printf("   - slave register write/read passed\n\n\r");
 
 	return XST_SUCCESS;
 }

@@ -22,7 +22,7 @@ unsigned int getTicks()
 
 unsigned int getMsSince(unsigned int start)
 {
-  return getMsDiff(start, _CPO_GET_COUNT());
+  return getMsDiff(start, _CP0_GET_COUNT());
 }
 
 //Count ms between start and end ticks, modulo 107,374ms

@@ -17,6 +17,8 @@
 #ifndef CARD_H
 #define CARD_H
 
+#include "randomization.h"
+
 typedef enum {
     HEARTS,
     DIAMONDS,

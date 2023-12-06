@@ -14,10 +14,6 @@
 /* ************************************************************************** */
 
 #include "balance.h"
-#include "keypad1.h"
-#include "time.h"
-#include <string.h>
-#include <stdio.h>
 
 #define ADMIN_CODE_LENGTH 6
 #define ADMIN_SECRET_CODE "123456"

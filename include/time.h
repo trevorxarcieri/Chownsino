@@ -19,8 +19,9 @@
 #ifndef _TIME_H    /* Guard against multiple inclusion */
 #define _TIME_H
 
-#include "config_bits.h"
+#include <xc.h>
 
+#define PB_FREQ  40000000
 #define ONE_SEC_TICKS PB_FREQ
 #define ONE_MS_TICKS (ONE_SEC_TICKS/1000)
 

@@ -15,6 +15,11 @@
 #ifndef BALANCE_H
 #define BALANCE_H
 
+#include <string.h>
+#include <stdio.h>
+#include "keypad1.h"
+#include "time.h"
+
 //Define admin code timeout as 10s
 #define ADMIN_CODE_TIMEOUT  10000
 

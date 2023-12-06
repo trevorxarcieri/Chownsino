@@ -22,6 +22,8 @@
 #ifndef _UART_H    /* Guard against multiple inclusion */
 #define _UART_H
 
+#include <xc.h>
+
 //define UART configuration constants
 #define BRATE 1041 //U4BREG setting for ~9600 baud
 #define U_ENABLE 0x8008 //enable UART, BREGH=1, 1 stop, no parity

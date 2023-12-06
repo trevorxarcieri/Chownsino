@@ -25,9 +25,10 @@
 #ifndef _LCD_H    /* Guard against multiple inclusion */
 #define _LCD_H
 
-//Define CPU clock frequency and core timer ticks for one second
-#define CPU_FREQ    80000000
-#define ONE_SEC_TICKS (CPU_FREQ/2)    
+#include <xc.h>
+#include <sys/attribs.h>
+#include <string.h>
+#include "time.h"
 
 //port configuration values for input & output 
 #define OUT     0

@@ -23,9 +23,7 @@
 /* ************************************************************************** */
 
 
-#include <xc.h>
 #include "keypad1.h"
-#include "time.h"
 
 //global data items
 unsigned char keys[4][4] = {{'1','2','3', 'A'}, 

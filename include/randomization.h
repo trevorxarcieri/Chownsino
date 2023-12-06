@@ -17,6 +17,9 @@
 #ifndef RANDOMIZATION_H
 #define RANDOMIZATION_H
 
+#include <stdlib.h>
+#include "time.h"
+
 void randomizationInit(void);
 int generateRandomNumber(int a, int b);
 

@@ -24,6 +24,7 @@
 #define _GENERAL_IO_H
 
 #include <xc.h>
+#include "time.h"
 
 //Buttons BTNL and BTNU share functions with PGD and PGC signals for programming
 //the following line should be inserted in the code, to disable their programming function

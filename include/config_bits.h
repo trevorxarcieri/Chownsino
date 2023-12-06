@@ -25,8 +25,6 @@
 #ifndef _CONFIG_BITS_H    // Guard against multiple inclusion
     #define _CONFIG_BITS_H
 
-    #define PB_FREQ  40000000
-
     // PIC32MX370F512L Configuration Bit Settings
 
     // DEVCFG3

@@ -19,8 +19,6 @@
 /* ************************************************************************** */
 
 #include "cards.h"
-#include "randomization.h"
-#include <stdlib.h>
 
 CardSet *createCardSet(int numDecks, double shoeRatio)
 {

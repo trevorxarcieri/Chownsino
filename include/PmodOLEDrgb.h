@@ -28,15 +28,13 @@
 
 /************ Include Files ************/
 
+#include "time.h"
 #include "xil_types.h"
 #include "xspi.h"
 #include "xspi_l.h"
 #include "xstatus.h"
-#include "ChrFont0.h"
-#include "sleep.h"
 #include "xil_cache.h"
 #include "xparameters.h"
-
 
 /************ Macro Definitions ************/
 

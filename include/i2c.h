@@ -22,6 +22,9 @@
 #ifndef _I2C_H    /* Guard against multiple inclusion */
 #define _I2C_H
 
+#include <xc.h>
+#include <sys/attribs.h>
+
 void I2C_Init(unsigned long pb_freq, unsigned int clockFreq);
 unsigned char I2C_Write(unsigned char slaveAddress,
                         unsigned char* dataBuffer,

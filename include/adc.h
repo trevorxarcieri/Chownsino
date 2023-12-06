@@ -21,6 +21,9 @@
 #ifndef _ADC_H    /* Guard against multiple inclusion */
 #define _ADC_H
 
+#include <xc.h>
+#include <sys/attribs.h>
+
 // Analog input AN2
 #define tris_ADC_AN2    TRISBbits.TRISB2
 #define ansel_ADC_AN2   ANSELBbits.ANSB2

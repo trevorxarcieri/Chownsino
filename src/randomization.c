@@ -14,13 +14,11 @@
  */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include <time.h>
 #include "randomization.h"
 
 void randomizationInit(void) {
     // Seed the random number generator with the current time
-    srand((unsigned int)time(NULL));
+    srand(getTicks());
 }
 
 int generateRandomNumber(int a, int b) {

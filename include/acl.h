@@ -22,6 +22,11 @@
 #ifndef _ACL_H    /* Guard against multiple inclusion */
 #define _ACL_H
 
+#include <xc.h>
+#include <sys/attribs.h>
+#include "i2c.h"
+#include "time.h"
+
 // ACL interrupt pin
 #define tris_ACL_INT2   TRISGbits.TRISG0
 #define lat_ACL_INT2    LATGbits.LATG0

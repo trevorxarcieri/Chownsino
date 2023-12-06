@@ -24,6 +24,7 @@
 
 #include <xc.h>
 #include "general_IO.h"
+#include "time.h"
 
 //define pins used for interfacing the keypad
 #define col1_dir      TRISGbits.TRISG6

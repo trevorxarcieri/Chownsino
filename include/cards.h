@@ -15,7 +15,9 @@
 #ifndef CARDS_H
 #define CARDS_H
 
+#include <stdlib.h>
 #include "card.h"
+#include "randomization.h"
 
 typedef struct {
     int numDecks;

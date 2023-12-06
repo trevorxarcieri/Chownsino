@@ -14,7 +14,6 @@
 /* ************************************************************************** */
 
 #include "card.h"
-#include "randomization.h"
 
 Card generateRandomCard(void) {
     Card randomCard;
