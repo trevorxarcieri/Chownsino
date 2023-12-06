@@ -121,6 +121,7 @@ void shuffleCardSet(CardSet *cardSet)
         combinedDeck[cardSet->cardsLeft + i] = cardSet->discardPile[i];
     }
 
+    //TODO: MAKE SURE SHUFLLING RESPECTS DECK #
     // Shuffle the combined deck
     for (int i = totalCards - 1; i > 0; --i)
     {

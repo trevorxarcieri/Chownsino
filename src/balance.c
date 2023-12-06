@@ -48,6 +48,8 @@ int adminAddToBalance(Balance* balance, int amount, const char* adminCode) {
     //TODO: implement print
     printf("Enter admin code: ");
 
+    //TODO: implement admin balance input
+
     char enteredCode[ADMIN_CODE_LENGTH + 1] = {0};
     unsigned int startTime = getTicks();
 
