@@ -1,5 +1,5 @@
 /* ************************************************************************** */
-/** Descriptive File Name
+/** 
 
   @Company
     Digilent
@@ -27,12 +27,18 @@
 /* ************************************************************************** */
 #include <xc.h>
 #include <sys/attribs.h>
+#include "config_bits.h"
 #include "i2c.h"
 #include "acl.h"
 
 /* ************************************************************************** */
 
 float fGRangeLSB;   // global variable used to pre-compute the value in g corresponding to each count of the raw value
+
+void ACL_Init_Default()
+{
+    return ACL_Init(PB_FREQ);
+}
 
 /* ------------------------------------------------------------ */
 /***	ACL_Init

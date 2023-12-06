@@ -1,14 +1,15 @@
 /* ************************************************************************** */
-/** Descriptive File Name
+/** 
 
   @Company
     Kettering University
 
   @File Name
-    SWsLEDs.h
+    general_IO.h
 
   @Summary
-    Defines the I/O pins and function prototypes for the switches and LEDs interfacing
+    Defines the I/O pins and function prototypes for the switches, buttons,
+    and LEDs interfacing
 
   @Description
     This header file defines the I/O pins used by the switches and LEDs interfacing
@@ -19,12 +20,11 @@
  */
 /* ************************************************************************** */
 
-#ifndef _SWsLEDs__H    /* Guard against multiple inclusion */
-#define _SWsLEDs__H
+#ifndef _GENERAL_IO_H    /* Guard against multiple inclusion */
+#define _GENERAL_IO_H
 
-#define CPU_FREQ    80000000
-#define ONE_SEC_TICKS (CPU_FREQ/2)
-    
+#include <xc.h>
+
 //Buttons BTNL and BTNU share functions with PGD and PGC signals for programming
 //the following line should be inserted in the code, to disable their programming function
 
@@ -92,10 +92,7 @@ void initAllLEDs(void);
 void writeAllLEDs(unsigned char);
 void writeLED(unsigned char index, unsigned char val);
 
-//time delay functions    
-void msDelay(unsigned int ms);
-
-#endif /* _SWsLEDs__H */
+#endif /* _GENERAL_IO_H */
 
 /* *****************************************************************************
  End of File

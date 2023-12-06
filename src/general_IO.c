@@ -4,10 +4,11 @@
     Kettering University
 
   @File Name
-    SWsLEDs.c
+    general_IO.c
 
   @Summary
-    Implements the functions necessary for the basic I/O control operations of switches and LEDs
+    Implements the functions necessary for the basic I/O control operations of switches,
+    buttons, and LEDs
 
   @Description
     
@@ -18,14 +19,8 @@
  */
 /* ************************************************************************** */
 
-/* Comment out the following define statement when programmer is NOT used to 
- * allow using BTNL and BTNU as user inputs. Inputs from push buttons BTNL and 
- * BRNU are not functional unless compiled and programmed for stand alone 
- * operation */
-
-#define DEBUG_MODE 
-
-#include "SWsLEDs.h"
+#include "general_IO.h"
+#include "time.h"
 
 //initialize all switches as inputs
 //switches (SW0..SW7)are attached to the PIC32 GPIO pins 
@@ -64,22 +59,20 @@ unsigned char readSwitches(void) {
 //initialize the pushbutton switches (configure port direction)
 void initButtons(void) {
     //configure the button pins as inputs
+    ANSELBbits.ANSB1 = 0; // RB1 (BTNU) disabled analog
+    BTNU_dir = IN;
+    CNPDBbits.CNPDB1 = 1;
 
-    /* See http://umassamherstm5.org/tech-tutorials/pic32-tutorials/pic32mx220-tutorials/internal-pull-updown-resistors */
-    /* Macro instructions to set the push buttons as inputs */
-    #ifndef DEBUG_MODE
-    /* Include BTNL and BTNU only if NOT in debug mode */
-        ANSELBbits.ANSB1 = 0; // RB1 (BTNU) disabled analog
-        BTNU_dir = IN;
-        CNPDBbits.CNPDB1 = 1;
-        ANSELBbits.ANSB0 = 0; // RB0 (BTNL) disabled analog
-        BTNL_dir = IN; 
-        CNPDBbits.CNPDB0 = 1;
-    #endif
+    ANSELBbits.ANSB0 = 0; // RB0 (BTNL) disabled analog
+    BTNL_dir = IN; 
+    CNPDBbits.CNPDB0 = 1;
 
     BTNC_dir = IN;
+
     ANSELBbits.ANSB8 = 0; // RB8 (BTNR) disabled analog
     BTNR_dir = IN;
+    CNPDBbits.CNPDB8 = 1;
+
     BTND_dir = IN;
 }
 
@@ -90,9 +83,6 @@ void initButtons(void) {
 //The buttons have mechanical bouncing issues which is not handled in this function
 //the user can use software debouncing technique in their code 
 unsigned char readButtons(void) {
-
-    //write your code below this line
-    
     unsigned char inputState = 0;
     
     //create a bit pattern based on the status of the button inputs
@@ -117,16 +107,9 @@ void writeAllLEDs(unsigned char val) {
 //index is the bit position for the LED (0 to 7)
 //val is 1 to turn on the LED, and 0 to turn off the LED
 void writeLED(unsigned char index, unsigned char val) {
-
-    //write your code below this line
-    
-}
-
-//generate time delay for the specified amount of milliseconds
-void msDelay(unsigned int ms) {
-    // Convert ms microseconds into how many clock ticks it will take
-    unsigned int ticks = ms * (ONE_SEC_TICKS/1000);
-    _CP0_SET_COUNT(0); // Set Core Timer count to 0
-    // Wait until Core Timer count reaches the number calculated above
-    while (ticks > _CP0_GET_COUNT()); 
+    unsigned char ledMask = 1 << index;
+    if(val)
+        LATASET = ledMask;
+    else
+        LATACLR = ledMask;
 }

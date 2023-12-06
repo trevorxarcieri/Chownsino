@@ -1,5 +1,5 @@
 /* ************************************************************************** */
-/** Descriptive File Name
+/** 
 
   @Company
     Digilent
@@ -106,9 +106,6 @@ void LCD_SetWriteCgramPosition(unsigned char bAdr);
 void LCD_WriteCommand(unsigned char bCmd);
 void LCD_WriteDataByte(unsigned char bData);
 void LCD_ConfigurePins();
-
-//utility function for small time delay
-void DelayAprox10Us( unsigned int tusDelay );
 
 #endif
 

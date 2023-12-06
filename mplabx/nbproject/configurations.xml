@@ -5,6 +5,32 @@
                    displayName="Header Files"
                    projectFiles="true">
       <logicalFolder name="include" displayName="include" projectFiles="true">
+        <itemPath>../include/time.h</itemPath>
+        <itemPath>../include/keypad1.h</itemPath>
+        <itemPath>../include/ cards.h</itemPath>
+        <itemPath>../include/adc.h</itemPath>
+        <itemPath>../include/balance.h</itemPath>
+        <itemPath>../include/casino.h</itemPath>
+        <itemPath>../include/general_IO.h</itemPath>
+        <itemPath>../include/i2c.h</itemPath>
+        <itemPath>../include/card.h</itemPath>
+        <itemPath>../include/acl.h</itemPath>
+        <itemPath>../include/PmodOLEDrgb.h</itemPath>
+        <itemPath>../include/input_wrapper.h</itemPath>
+        <itemPath>../include/randomization.h</itemPath>
+        <itemPath>../include/xspi_l.h</itemPath>
+        <itemPath>../include/xspi_i.h</itemPath>
+        <itemPath>../include/xspi.h</itemPath>
+        <itemPath>../include/uart.h</itemPath>
+        <itemPath>../include/config_bits.h</itemPath>
+        <itemPath>../include/bet.h</itemPath>
+        <itemPath>../include/lcd.h</itemPath>
+        <itemPath>../include/ChrFont0.h</itemPath>
+        <itemPath>../include/xil_assert.h</itemPath>
+        <itemPath>../include/xil_types.h</itemPath>
+        <itemPath>../include/sleep.h</itemPath>
+        <itemPath>../include/bspconfig.h</itemPath>
+        <itemPath>../include/xparameters.h</itemPath>
       </logicalFolder>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
@@ -14,6 +40,31 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
+      <logicalFolder name="src" displayName="src" projectFiles="true">
+        <itemPath>../src/bet.c</itemPath>
+        <itemPath>../src/keypad1.c</itemPath>
+        <itemPath>../src/input_wrapper.c</itemPath>
+        <itemPath>../src/uart.c</itemPath>
+        <itemPath>../src/i2c.c</itemPath>
+        <itemPath>../src/card.c</itemPath>
+        <itemPath>../src/general_IO.c</itemPath>
+        <itemPath>../src/xspi_stats.c</itemPath>
+        <itemPath>../src/PmodOLEDrgb_selftest.c</itemPath>
+        <itemPath>../src/xspi_selftest.c</itemPath>
+        <itemPath>../src/cards.c</itemPath>
+        <itemPath>../src/randomization.c</itemPath>
+        <itemPath>../src/balance.c</itemPath>
+        <itemPath>../src/xspi_options.c</itemPath>
+        <itemPath>../src/lcd.c</itemPath>
+        <itemPath>../src/acl.c</itemPath>
+        <itemPath>../src/time.c</itemPath>
+        <itemPath>../src/main.c</itemPath>
+        <itemPath>../src/PmodOLEDrgb.c</itemPath>
+        <itemPath>../src/adc.c</itemPath>
+        <itemPath>../src/xspi.c</itemPath>
+        <itemPath>../src/casino.c</itemPath>
+        <itemPath>../src/xil_assert.c</itemPath>
+      </logicalFolder>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -23,6 +74,7 @@
   </logicalFolder>
   <sourceRootList>
     <Elem>../include</Elem>
+    <Elem>../src</Elem>
   </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
@@ -32,7 +84,7 @@
         <targetDevice>PIC32MX370F512L</targetDevice>
         <targetHeader></targetHeader>
         <targetPluginBoard></targetPluginBoard>
-        <platformTool>PK3OBPlatformTool</platformTool>
+        <platformTool>noID</platformTool>
         <languageToolchain>XC32</languageToolchain>
         <languageToolchainVersion>4.21</languageToolchainVersion>
         <platform>2</platform>
@@ -191,7 +243,7 @@
         <property key="use-indirect-calls" value="false"/>
       </C32CPP>
       <C32Global>
-        <property key="common-include-directories" value=""/>
+        <property key="common-include-directories" value="../include"/>
         <property key="gp-relative-option" value=""/>
         <property key="legacy-libc" value="true"/>
         <property key="mdtcm" value=""/>
@@ -203,6 +255,70 @@
         <property key="stack-smashing" value=""/>
         <property key="wpo-lto" value="false"/>
       </C32Global>
+      <PK3OBPlatformTool>
+        <property key="AutoSelectMemRanges" value="auto"/>
+        <property key="SecureSegment.SegmentProgramming" value="FullChipProgramming"/>
+        <property key="ToolFirmwareFilePath"
+                  value="Press to browse for a specific firmware version"/>
+        <property key="ToolFirmwareOption.UseLatestFirmware" value="true"/>
+        <property key="debugoptions.debug-startup" value="Use system settings"/>
+        <property key="debugoptions.reset-behaviour" value="Use system settings"/>
+        <property key="lastid" value=""/>
+        <property key="memories.bootflash" value="true"/>
+        <property key="memories.configurationmemory" value="true"/>
+        <property key="memories.dataflash" value="true"/>
+        <property key="memories.eeprom" value="true"/>
+        <property key="memories.id" value="true"/>
+        <property key="memories.programmemory" value="true"/>
+        <property key="memories.programmemory.ranges"
+                  value="${memories.programmemory.ranges}"/>
+        <property key="memories.userotp" value="true"/>
+        <property key="poweroptions.powerenable" value="false"/>
+        <property key="programoptions.eraseb4program" value="true"/>
+        <property key="programoptions.preservedataflash" value="false"/>
+        <property key="programoptions.preservedataflash.ranges"
+                  value="${programoptions.preservedataflash.ranges}"/>
+        <property key="programoptions.preserveeeprom" value="false"/>
+        <property key="programoptions.preserveeeprom.ranges"
+                  value="${programoptions.preserveeeprom.ranges}"/>
+        <property key="programoptions.preserveprogram.ranges" value=""/>
+        <property key="programoptions.preserveprogramrange" value="false"/>
+        <property key="programoptions.usehighvoltageonmclr" value="false"/>
+        <property key="programoptions.uselvpprogramming" value="false"/>
+        <property key="voltagevalue" value="3.25"/>
+      </PK3OBPlatformTool>
+      <Tool>
+        <property key="AutoSelectMemRanges" value="auto"/>
+        <property key="SecureSegment.SegmentProgramming" value="FullChipProgramming"/>
+        <property key="ToolFirmwareFilePath"
+                  value="Press to browse for a specific firmware version"/>
+        <property key="ToolFirmwareOption.UseLatestFirmware" value="true"/>
+        <property key="debugoptions.debug-startup" value="Use system settings"/>
+        <property key="debugoptions.reset-behaviour" value="Use system settings"/>
+        <property key="lastid" value=""/>
+        <property key="memories.bootflash" value="true"/>
+        <property key="memories.configurationmemory" value="true"/>
+        <property key="memories.dataflash" value="true"/>
+        <property key="memories.eeprom" value="true"/>
+        <property key="memories.id" value="true"/>
+        <property key="memories.programmemory" value="true"/>
+        <property key="memories.programmemory.ranges"
+                  value="${memories.programmemory.ranges}"/>
+        <property key="memories.userotp" value="true"/>
+        <property key="poweroptions.powerenable" value="false"/>
+        <property key="programoptions.eraseb4program" value="true"/>
+        <property key="programoptions.preservedataflash" value="false"/>
+        <property key="programoptions.preservedataflash.ranges"
+                  value="${programoptions.preservedataflash.ranges}"/>
+        <property key="programoptions.preserveeeprom" value="false"/>
+        <property key="programoptions.preserveeeprom.ranges"
+                  value="${programoptions.preserveeeprom.ranges}"/>
+        <property key="programoptions.preserveprogram.ranges" value=""/>
+        <property key="programoptions.preserveprogramrange" value="false"/>
+        <property key="programoptions.usehighvoltageonmclr" value="false"/>
+        <property key="programoptions.uselvpprogramming" value="false"/>
+        <property key="voltagevalue" value="3.25"/>
+      </Tool>
     </conf>
   </confs>
 </configurationDescriptor>

@@ -1,13 +1,12 @@
 /* ************************************************************************** */
-/** Descriptive File Name
+/** 
 
   @File Name
     casino.h
 
   @Description
     This file groups the declarations of the functions that implement
-    the casino module (defined in casino.c). This module is that of the
-    overarching casino system which coordinates with the other subsystems.
+    the casino module (defined in casino.c). 
     The file is included where the casino system is controlled (main.c).
   
   @Author

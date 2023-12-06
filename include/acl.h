@@ -1,5 +1,5 @@
 /* ************************************************************************** */
-/** Descriptive File Name
+/** 
 
   @Company
     Digilent
@@ -35,6 +35,7 @@
 
 // function prototypes
 void ACL_Init(unsigned long int pb_freq);
+void ACL_Init_Default(void);
 void ACL_ReadRawValues(unsigned char *rgRawVals);
 void ACL_ReadGValues(float *rgGVals);
 unsigned char ACL_SetRange(unsigned char bRange);

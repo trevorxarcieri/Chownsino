@@ -1,5 +1,5 @@
 /* ************************************************************************** */
-/** Descriptive File Name
+/** 
 
   @Company
     Digilent
@@ -15,19 +15,18 @@
         Include the file together with config.h, utils.c and utils.h in the project when this library is needed.	
  
   @Author
-    Cristian Fatu 
+    Cristian Fatu and Trevor Arcieri
     cristian.fatu@digilent.ro
 */
 /* ************************************************************************** */
 
-/* ************************************************************************** */
-/* ************************************************************************** */
 /* Section: Included Files                                                    */
 /* ************************************************************************** */
 #include <xc.h>
 #include <sys/attribs.h>
 #include <string.h>
 #include "lcd.h"
+#include "time.h"
 /* ************************************************************************** */
 
 /* ------------------------------------------------------------ */
@@ -511,49 +510,6 @@ void LCD_WriteBytesAtPosCgram(unsigned char *pBytes, unsigned char len, unsigned
 		LCD_WriteDataByte(pBytes[idx]);
 		idx++;
 	}
-}
-
-/* ------------------------------------------------------------ */
-/***    Delay100Us
-**
-**	Synopsis:
-**		Delay100Us(100)
-**
-**	Parameters:
-**		t100usDelay - the amount of time you wish to delay in hundreds of microseconds
-**
-**	Return Values:
-**      none
-**
-**	Errors:
-**		none
-**
-**	Description:
-**		This procedure delays program execution for the specified number
-**      of microseconds. This delay is not precise.
-**		
-**	Note:
-**		This routine is written with the assumption that the
-**		system clock is 40 MHz.
-*/
-void DelayAprox10Us( unsigned int  t100usDelay )
-{
-    int j;
-    while ( 0 < t100usDelay )
-    {
-        t100usDelay--;
-        j = 14;
-        while ( 0 < j )
-        {
-            j--;
-        }   // end while 
-        asm volatile("nop"); // do nothing
-        asm volatile("nop"); // do nothing
-        asm volatile("nop"); // do nothing
-        asm volatile("nop"); // do nothing
-        asm volatile("nop"); // do nothing
-         
-    }   // end while
 }
 
 /* *****************************************************************************
