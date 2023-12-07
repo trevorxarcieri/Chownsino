@@ -34,7 +34,6 @@
         <itemPath>../include/uart.h</itemPath>
         <itemPath>../include/config_bits.h</itemPath>
         <itemPath>../include/bet.h</itemPath>
-        <itemPath>../include/xil_printf.h</itemPath>
         <itemPath>../include/xstatus.h</itemPath>
         <itemPath>../include/riscv_interface.h</itemPath>
         <itemPath>../include/lcd.h</itemPath>
@@ -74,7 +73,6 @@
         <itemPath>../src/adc.c</itemPath>
         <itemPath>../src/xspi.c</itemPath>
         <itemPath>../src/casino.c</itemPath>
-        <itemPath>../src/xil_printf.c</itemPath>
       </logicalFolder>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"

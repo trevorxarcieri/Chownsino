@@ -16,6 +16,9 @@
     "xc.h": "c",
     "stdlib.h": "c",
     "attribs.h": "c",
-    "sleep.h": "c"
+    "sleep.h": "c",
+    "stdio.h": "c",
+    "config_bits.h": "c",
+    "casino.h": "c"
   }
 }

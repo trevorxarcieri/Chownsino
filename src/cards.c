@@ -22,7 +22,7 @@
 
 CardSet *createCardSet(int numDecks, double shoeRatio)
 {
-    CardSet *cardSet = (CardSet *)malloc(sizeof(CardSet));
+    CardSet *cardSet;
     if (cardSet == NULL)
     {
         // Handle memory allocation failure
@@ -32,15 +32,12 @@ CardSet *createCardSet(int numDecks, double shoeRatio)
     cardSet->numDecks = numDecks;
     cardSet->shoeRatio = shoeRatio;
     cardSet->cardsLeft = numDecks * 52; // Each deck has 52 cards
-    cardSet->deck = (Card *)malloc(cardSet->cardsLeft * sizeof(Card));
-    cardSet->discardPile = (Card *)malloc(cardSet->cardsLeft * sizeof(Card));
+    cardSet->deck;
+    cardSet->discardPile;
 
     if (cardSet->deck == NULL || cardSet->discardPile == NULL)
     {
         // Handle memory allocation failure
-        free(cardSet->deck);
-        free(cardSet->discardPile);
-        free(cardSet);
         exit(EXIT_FAILURE);
     }
 
@@ -57,14 +54,13 @@ CardSet *createCardSet(int numDecks, double shoeRatio)
         }
     }
 
+    shuffleCardSet(cardSet);
+
     return cardSet;
 }
 
 void destroyCardSet(CardSet *cardSet)
 {
-    free(cardSet->deck);
-    free(cardSet->discardPile);
-    free(cardSet);
 }
 
 Card pullTopCard(CardSet *cardSet, ShuffleStatus *shuffleStatus)
@@ -99,7 +95,7 @@ void shuffleCardSet(CardSet *cardSet)
 {
     // Combine the discard pile and the remaining deck
     int totalCards = cardSet->cardsLeft + (cardSet->numDecks * 52 - cardSet->cardsLeft);
-    Card *combinedDeck = (Card *)malloc(totalCards * sizeof(Card));
+    Card *combinedDeck;
 
     if (combinedDeck == NULL)
     {
@@ -119,7 +115,6 @@ void shuffleCardSet(CardSet *cardSet)
         combinedDeck[cardSet->cardsLeft + i] = cardSet->discardPile[i];
     }
 
-    //TODO: MAKE SURE SHUFLLING RESPECTS DECK #
     // Shuffle the combined deck
     for (int i = totalCards - 1; i > 0; --i)
     {
@@ -138,5 +133,4 @@ void shuffleCardSet(CardSet *cardSet)
 
     // Reset cards left and free the temporary combined deck
     cardSet->cardsLeft = totalCards;
-    free(combinedDeck);
 }

@@ -47,7 +47,6 @@ extern "C" {
 /***************************** Include Files *********************************/
 
 #include "xil_types.h"
-#include "xil_printf.h"
 #include "xstatus.h"
 
 #if defined (__MICROBLAZE__)

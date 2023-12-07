@@ -19,7 +19,7 @@
 #define ADMIN_SECRET_CODE "123456"
 
 Balance* createBalance(void) {
-    Balance* balance = (Balance*)malloc(sizeof(Balance));
+    Balance* balance;
     if (balance == NULL) {
         // Handle memory allocation failure
         exit(EXIT_FAILURE);
@@ -42,7 +42,7 @@ int subtractFromBalance(Balance* balance, int amount) {
 int adminAddToBalance(Balance* balance, int amount, const char* adminCode) {
     // Prompt for admin code entry
     //TODO: implement print
-    printf("Enter admin code: ");
+    //printf("Enter admin code: ");
 
     //TODO: implement admin balance input
 

@@ -4,10 +4,11 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/**",
-                "/opt/microchip/xc32/v4.21/pic32mx/include/*"
+                "/opt/microchip/xc32/v4.21/pic32mx/include/*",
+                "/opt/microchip/xc32/v4.21/pic32mx/include/pic32m-libs/*"
             ],
             "defines": [],
-            "compilerPath": "/usr/bin/gcc",
+            "compilerPath": "/opt/microchip/xc32/v4.21/bin/xc32-gcc",
             "cStandard": "c17",
             "cppStandard": "gnu++17",
             "intelliSenseMode": "linux-gcc-x64"
