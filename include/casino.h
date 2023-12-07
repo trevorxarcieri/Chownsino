@@ -20,6 +20,7 @@
 
 void initCasino(PmodOLEDrgb* oledStruct);
 void cleanupCasino(PmodOLEDrgb* oledStruct);
+int askUserAge(void);
 void startCasino();
 
 #endif /* CASINO_H */
