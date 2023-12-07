@@ -19,6 +19,8 @@
     "sleep.h": "c",
     "stdio.h": "c",
     "config_bits.h": "c",
-    "casino.h": "c"
+    "casino.h": "c",
+    "xil_cache.h": "c",
+    "xstatus.h": "c"
   }
 }
