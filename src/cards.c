@@ -20,26 +20,13 @@
 
 #include "cards.h"
 
-CardSet *createCardSet(int numDecks, double shoeRatio)
+void initCardSet(CardSet* cardSet, int numDecks, double shoeRatio)
 {
-    CardSet *cardSet;
-    if (cardSet == NULL)
-    {
-        // Handle memory allocation failure
-        exit(EXIT_FAILURE);
-    }
-
     cardSet->numDecks = numDecks;
     cardSet->shoeRatio = shoeRatio;
     cardSet->cardsLeft = numDecks * 52; // Each deck has 52 cards
-    cardSet->deck;
-    cardSet->discardPile;
-
-    if (cardSet->deck == NULL || cardSet->discardPile == NULL)
-    {
-        // Handle memory allocation failure
-        exit(EXIT_FAILURE);
-    }
+    cardSet->deck[cardSet->cardsLeft];
+    cardSet->discardPile[cardSet->cardsLeft];
 
     // Initialize the deck and discard pile
     for (int deck = 0; deck < numDecks; ++deck)
@@ -55,12 +42,6 @@ CardSet *createCardSet(int numDecks, double shoeRatio)
     }
 
     shuffleCardSet(cardSet);
-
-    return cardSet;
-}
-
-void destroyCardSet(CardSet *cardSet)
-{
 }
 
 Card pullTopCard(CardSet *cardSet, ShuffleStatus *shuffleStatus)
@@ -94,14 +75,8 @@ void discardTopCard(CardSet *cardSet)
 void shuffleCardSet(CardSet *cardSet)
 {
     // Combine the discard pile and the remaining deck
-    int totalCards = cardSet->cardsLeft + (cardSet->numDecks * 52 - cardSet->cardsLeft);
-    Card *combinedDeck;
-
-    if (combinedDeck == NULL)
-    {
-        // Handle memory allocation failure
-        exit(EXIT_FAILURE);
-    }
+    int totalCards = cardSet->numDecks * 52;
+    Card combinedDeck[totalCards];
 
     // Copy remaining deck to the combined deck
     for (int i = 0; i < cardSet->cardsLeft; ++i)

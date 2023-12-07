@@ -32,8 +32,7 @@ typedef enum {
     SHUFFLING
 } ShuffleStatus;
 
-CardSet* createCardSet(int numDecks, double shoeRatio);
-void destroyCardSet(CardSet* cardSet);
+void initCardSet(CardSet* cardSet, int numDecks, double shoeRatio);
 Card pullTopCard(CardSet* cardSet, ShuffleStatus* shuffleStatus);
 void discardTopCard(CardSet* cardSet);
 void shuffleCardSet(CardSet* cardSet);
