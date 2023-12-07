@@ -39,7 +39,7 @@ void DisableCaches();
 
 PmodOLEDrgb oledrgb;
 
-void initializeOLED(PmodOLEDrgb *oledrgb) {
+void initOLED(PmodOLEDrgb *oledrgb) {
    EnableCaches();
    OLEDrgb_begin(oledrgb, XPAR_PMODOLEDRGB_0_AXI_LITE_GPIO_BASEADDR,
          XPAR_PMODOLEDRGB_0_AXI_LITE_SPI_BASEADDR);

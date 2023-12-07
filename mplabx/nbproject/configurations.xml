@@ -40,16 +40,13 @@
         <itemPath>../include/input_wrapper.h</itemPath>
         <itemPath>../include/randomization.h</itemPath>
         <itemPath>../include/bet.h</itemPath>
+        <itemPath>../include/oled_images.h</itemPath>
+        <itemPath>../include/output_wrapper.h</itemPath>
       </logicalFolder>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
                    projectFiles="true">
-    </logicalFolder>
-    <logicalFolder name="ScriptFiles"
-                   displayName="Script Files"
-                   projectFiles="true">
-      <itemPath>autoload.py</itemPath>
     </logicalFolder>
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
@@ -77,6 +74,7 @@
         <itemPath>../lib/internal_lib/src/time.c</itemPath>
         <itemPath>../lib/internal_lib/src/PmodOLEDrgb.c</itemPath>
         <itemPath>../lib/internal_lib/src/adc.c</itemPath>
+        <itemPath>../src/output_wrapper.c</itemPath>
       </logicalFolder>
       <itemPath>../main.c</itemPath>
     </logicalFolder>

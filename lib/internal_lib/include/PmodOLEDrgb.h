@@ -178,7 +178,7 @@ typedef struct {
 
 
 /************ Function Prototypes ************/
-void initializeOLED(PmodOLEDrgb *oledrgb);
+void initOLED(PmodOLEDrgb *oledrgb);
 void cleanupOLED(PmodOLEDrgb *oledrgb);
 
 void OLEDrgb_begin(PmodOLEDrgb *InstancePtr, u32 GPIO_Address, u32 SPI_Address);
