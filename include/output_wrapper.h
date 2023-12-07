@@ -15,6 +15,7 @@
 #ifndef OUTPUT_WRAPPER_H
 #define OUTPUT_WRAPPER_H
 
+#include <stdio.h>
 #include "general_IO.h"
 #include "lcd.h"
 #include "uart.h"

@@ -38,5 +38,6 @@ typedef struct {
 } Card;
 
 Card generateRandomCard(void);
+void printCardVal(char* str, CardValue value);
 
 #endif /* CARD_H */

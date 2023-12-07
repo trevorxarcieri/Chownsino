@@ -19,6 +19,9 @@
 #include <stdio.h>
 #include "keypad1.h"
 #include "time.h"
+#include "uart.h"
+
+#define ADMIN_SECRET_CODE "123456"
 
 //Define admin code timeout as 10s
 #define ADMIN_CODE_TIMEOUT  10000
@@ -26,13 +29,20 @@
 //Define admin code to be 6 digits long
 #define ADMIN_CODE_LENGTH 6
 
+//Define admin balance add amount timeout as 10s
+#define ADMIN_AMT_TIMEOUT 10000
+
+//Define admin balance add max length as 9 digits
+#define MAX_AMT_LENGTH 9
+
 typedef struct {
-    int balance;
+    unsigned int balance;
 } Balance;
 
-Balance* createBalance(void);
-int addToBalance(Balance* balance, int amount);
-int subtractFromBalance(Balance* balance, int amount);
-int adminAddToBalance(Balance* balance, int amount, const char* adminCode);
+void createBalance(Balance* balance);
+void addToBalance(Balance* balance, int amount);
+void subtractFromBalance(Balance* balance, int amount);
+void adminAddToBalance(Balance* balance);
+unsigned int amtFromStr(char* str, int len);
 
 #endif /* BALANCE_H */

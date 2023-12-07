@@ -34,6 +34,46 @@ void cleanupOutput(PmodOLEDrgb* oledStruct) {
     cleanupOLED(oledStruct);
 }
 
+void displayCard(PmodOLEDrgb* oledStruct, Card card, int centerPosition) {
+    // Implement display logic using UART for now
+    //TODO: change display to OLED
+
+    // Display card value
+    char valueStr[3];  // Assuming the maximum length of the value is 2 characters
+    printCardVal(valueStr, card.value);
+    UART4_putstr((uint8_t*)valueStr);
+
+    // Display card suit
+    char suitStr[2];  // Assuming the maximum length of the suit is 1 character
+    switch (card.suit) {
+        case HEARTS:
+            suitStr[0] = 'H';
+            break;
+        case DIAMONDS:
+            suitStr[0] = 'D';
+            break;
+        case CLUBS:
+            suitStr[0] = 'C';
+            break;
+        case SPADES:
+            suitStr[0] = 'S';
+            break;
+        default:
+            suitStr[0] = '?';
+    }
+    suitStr[1] = '\0';
+    UART4_putstr((uint8_t*)suitStr);
+}
+
+void displayCards(PmodOLEDrgb* oledStruct, int numCards, int topLeftPosition, Card* cards) {
+    // Implement display logic using UART for now
+    //TODO: change display to OLED
+
+    for (int i = 0; i < numCards; ++i) {
+        displayCard(oledStruct, cards[i], topLeftPosition + i);
+    }
+}
+
 void displayText(PmodOLEDrgb* oledStruct, int x, int y, const char* text) {
     OLEDrgb_SetCursor(oledStruct, x, y);
     OLEDrgb_PutString(oledStruct, (char *) &text);
