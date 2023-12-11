@@ -111,6 +111,11 @@ unsigned int getAmt(unsigned int startTicks, unsigned int timeout)
                 amountStr[amountIndex] = '\0';  // Null-terminate the string
             }
         }
+
+        if(amountIndex == MAX_AMT_LENGTH)
+        {
+            break;
+        }
     }
 
     return amtFromStr(amountStr, amountIndex);

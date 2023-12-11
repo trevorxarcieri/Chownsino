@@ -22,7 +22,7 @@ int bet(Balance* balance, int betAmount, Bet* outBet) {
         balance->balance -= betAmount;
 
         // Set the bet amount in the Bet struct
-        outBet->amount = betAmount;
+        outBet->amount += betAmount;
 
         // Return success
         return 1;

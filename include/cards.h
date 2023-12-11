@@ -33,6 +33,7 @@ typedef enum {
 } ShuffleStatus;
 
 void initCardSet(CardSet* cardSet, int numDecks, double shoeRatio);
+void initCardsInSet(CardSet* cardSet);
 void pullTopCard(Card* card, CardSet* cardSet, ShuffleStatus* shuffleStatus);
 void discardTopCard(CardSet* cardSet);
 void shuffleCardSet(CardSet* cardSet);

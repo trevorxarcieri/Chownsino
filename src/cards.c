@@ -25,11 +25,12 @@ void initCardSet(CardSet* cardSet, int numDecks, double shoeRatio)
     cardSet->numDecks = numDecks;
     cardSet->shoeRatio = shoeRatio;
     cardSet->cardsLeft = numDecks * 52; // Each deck has 52 cards
-    cardSet->deck[cardSet->cardsLeft];
-    cardSet->discardPile[cardSet->cardsLeft];
+}
 
+void initCardsInSet(CardSet* cardSet)
+{
     // Initialize the deck and discard pile
-    for (int deck = 0; deck < numDecks; ++deck)
+    for (int deck = 0; deck < cardSet->numDecks; ++deck)
     {
         for (int value = ACE; value <= KING; ++value)
         {
@@ -67,7 +68,7 @@ void pullTopCard(Card *topCard, CardSet *cardSet, ShuffleStatus *shuffleStatus)
 void discardTopCard(CardSet *cardSet)
 {
     // Move the top card to the discard pile
-    cardSet->discardPile[cardSet->cardsLeft++] = cardSet->deck[cardSet->cardsLeft];
+    cardSet->discardPile[--cardSet->cardsLeft] = cardSet->deck[cardSet->cardsLeft];
 }
 
 void shuffleCardSet(CardSet *cardSet)
@@ -85,7 +86,7 @@ void shuffleCardSet(CardSet *cardSet)
     // Copy discard pile to the combined deck
     for (int i = 0; i < totalCards - cardSet->cardsLeft; ++i)
     {
-        combinedDeck[cardSet->cardsLeft + i] = cardSet->discardPile[i];
+        combinedDeck[cardSet->cardsLeft + i] = cardSet->discardPile[totalCards - i - 1];
     }
 
     // Shuffle the combined deck

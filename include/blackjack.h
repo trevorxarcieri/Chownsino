@@ -26,7 +26,8 @@
 
 #define SHOE_RATIO 0.6
 
-void blackjackInit();
+#define MAX_BJ_HAND 5
+
 void playBlackjack(Balance userBalance, PmodOLEDrgb oledStruct);
 
 void displayPlayerHand(PmodOLEDrgb* oledStruct, Card* cards, int numCards);
@@ -44,6 +45,6 @@ void dealerTurn(PmodOLEDrgb* oledStruct, Card* dealerCards, int* numCards, CardS
 bool isPlayerWinner(Card* playerCards, int playerNumCards, Card* dealerCards, int dealerNumCards);
 
 bool offerAndHandleDoubleDown(PmodOLEDrgb* oledStruct, Card* playerCards, int* numCards, CardSet* cardSet, ShuffleStatus* shuffleStatus, Bet* currentBet, Balance* userBalance);
-void offerAndHandleSplit(PmodOLEDrgb* oledStruct, Card* playerCards, int* numCards, CardSet* cardSet, ShuffleStatus* shuffleStatus, Bet* currentBet, Balance* userBalance);
+int offerAndHandleSplit(PmodOLEDrgb* oledStruct, Card* playerCards, int* numCards, CardSet* cardSet, ShuffleStatus* shuffleStatus, Bet* currentBet, Balance* userBalance, Card* splitCards);
 
 #endif

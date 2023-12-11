@@ -1,10 +1,5 @@
 #include "blackjack.h"
 
-// Global game state variables
-Balance userBalance;
-CardSet cardSet;
-PmodOLEDrgb oledStruct; // Placeholder for the OLED structure
-
 void displayPlayerHand(PmodOLEDrgb* oledStruct, Card* cards, int numCards) {
     printUART("Player Hand: ");
     displayFullHand(oledStruct, cards, numCards);
@@ -22,15 +17,17 @@ void displayFullHand(PmodOLEDrgb* oledStruct, Card* cards, int numCards) {
         printUART(", ");
     }
     displayCard(oledStruct, cards[numCards - 1], 0);
+    printlnUART("");
 }
 
 void displayDealerHand(PmodOLEDrgb* oledStruct, Card* cards, int numCards) {
     printUART("Dealer Hand: ");
     displayCard(oledStruct, cards[0], 0);
+    printlnUART("");
 }
 
 void displayGameResult(PmodOLEDrgb* oledStruct, const char* result) {
-    printlnUART((char *) result);
+    printUART((char *) result);
 }
 
 // Function to calculate the total value of a hand
@@ -65,23 +62,26 @@ bool isBlackjack(Card* hand) {
 
 // Function for the player's turn
 void playerTurn(PmodOLEDrgb* oledStruct, Card* playerCards, int* numCards, CardSet* cardSet, ShuffleStatus* shuffleStatus) {
+    printlnUART("Hit (A) or Stand (B)?");
+    char decision = readKeypadInput();
     while (true) {
-        printlnUART("Hit (A) or Stand (B)?");
-        char decision = readKeypadInput();
         if (decision == 'A') {
             pullTopCard(&playerCards[(*numCards)++], cardSet, shuffleStatus);
+            if(*numCards == MAX_BJ_HAND)
+                break;
+            int handValue = calculateHandValue(playerCards, *numCards);
+            if (handValue > 21) {
+                printlnUART("Player busts!");
+                return;
+            }
             displayPlayerHand(oledStruct, playerCards, *numCards);
+            printlnUART("Hit (A) or Stand (B)?");
         }
         else if (decision == 'B') {
             break;
         }
         
-        int handValue = calculateHandValue(playerCards, *numCards);
-        if (handValue > 21) {
-            printlnUART("Player busts!");
-            return;
-        }
-
+        decision = readKeypadInput();
     }
 }
 
@@ -90,6 +90,8 @@ void dealerTurn(PmodOLEDrgb* oledStruct, Card* dealerCards, int* numCards, CardS
     while (calculateHandValue(dealerCards, *numCards) < 17) {
         pullTopCard(&dealerCards[(*numCards)++], cardSet, shuffleStatus);
         displayFullDealerHand(oledStruct, dealerCards, *numCards);
+        if(calculateHandValue(dealerCards, *numCards) > 21)
+            printlnUART("Dealer busts!");
     }
 }
 
@@ -101,129 +103,200 @@ bool isPlayerWinner(Card* playerCards, int playerNumCards, Card* dealerCards, in
     return playerValue <= 21 && (dealerValue > 21 || playerValue > dealerValue);
 }
 
+// Function to determine push
+bool isPush(Card* playerCards, int playerNumCards, Card* dealerCards, int dealerNumCards) {
+    int playerValue = calculateHandValue(playerCards, playerNumCards);
+    int dealerValue = calculateHandValue(dealerCards, dealerNumCards);
+
+    return playerValue <= 21 && (dealerValue == playerValue);
+}
+
 // Function to offer and handle double down
 bool offerAndHandleDoubleDown(PmodOLEDrgb* oledStruct, Card* playerCards, int* numCards, CardSet* cardSet, ShuffleStatus* shuffleStatus, Bet* currentBet, Balance* userBalance) {
     printlnUART("Do you want to Double Down? (A for yes, B for no)");
     char decision = readKeypadInput();
-
-    if (decision == 'Y' || decision == 'y') {
-        if (bet(userBalance, currentBet->amount, currentBet)) {
-            pullTopCard(&playerCards[(*numCards)++], cardSet, shuffleStatus);
-            displayPlayerHand(oledStruct, playerCards, *numCards);
-            return true;
+    while(true)
+    {
+        if (decision == 'A') {
+            if (bet(userBalance, currentBet->amount, currentBet)) {
+                pullTopCard(&playerCards[(*numCards)++], cardSet, shuffleStatus);
+                displayPlayerHand(oledStruct, playerCards, *numCards);
+                return true;
+            }
+            else {
+                printlnUART("Insufficient balance to double down.");
+                break;
+            }
         }
-        else {
-            printlnUART("Insufficient balance to double down.");
+        else if (decision == 'B')
+        {
+            break;
         }
+        decision = readKeypadInput();
     }
     return false;
 }
 
 // Function to offer and handle split
-void offerAndHandleSplit(PmodOLEDrgb* oledStruct, Card* playerCards, int* numCards, CardSet* cardSet, ShuffleStatus* shuffleStatus, Bet* currentBet, Balance* userBalance) {
+int offerAndHandleSplit(PmodOLEDrgb* oledStruct, Card* playerCards, int* numCards, CardSet* cardSet, ShuffleStatus* shuffleStatus, Bet* currentBet, Balance* userBalance, Card* splitCards) {
     if (playerCards[0].value == playerCards[1].value) {
         printlnUART("Do you want to Split? (A for yes, B for no)");
         char decision = readKeypadInput();
+        while(true)
+        {
+            if (decision == 'A') {
+                Bet additionalBet = *currentBet;
 
-        if (decision == 'A') {
-            Bet additionalBet = *currentBet;
+                if (bet(userBalance, additionalBet.amount, &additionalBet)) {
+                    splitCards[0] = playerCards[1];
+                    pullTopCard(&playerCards[1], cardSet, shuffleStatus);
+                    pullTopCard(&splitCards[1], cardSet, shuffleStatus);
+                    int numSplitCards = 2;
 
-            if (bet(userBalance, additionalBet.amount, &additionalBet)) {
-                Card splitHands[2][5];
-                int numCardsSplit[2] = { 1, 1 };
-                splitHands[0][0] = playerCards[0];
-                numCardsSplit[0]++;
-                splitHands[1][0] = playerCards[1];
-                numCardsSplit[1]++;
+                    displayPlayerHand(oledStruct, playerCards, *numCards);
+                    playerTurn(oledStruct, playerCards, numCards, cardSet, shuffleStatus);
+                    
+                    displayPlayerHand(oledStruct, splitCards, numSplitCards);
+                    playerTurn(oledStruct, splitCards, &numSplitCards, cardSet, shuffleStatus);
 
-                pullTopCard(&splitHands[0][1], cardSet, shuffleStatus);
-                pullTopCard(&splitHands[1][1], cardSet, shuffleStatus);
-                displayPlayerHand(oledStruct, splitHands[0], numCardsSplit[0]);
-                displayPlayerHand(oledStruct, splitHands[1], numCardsSplit[1]);
-
-                for (int i = 0; i < 2; i++) {
-                    playerTurn(oledStruct, splitHands[i], &numCardsSplit[i], cardSet, shuffleStatus);
-                    // Handle bets and display results for each hand
+                    return numSplitCards;
+                }
+                else {
+                    printlnUART("Insufficient balance to split.");
+                    break;
                 }
             }
-            else {
-                printlnUART("Insufficient balance to split.");
+            else if (decision == 'B')
+            {
+                break;
             }
+            decision = readKeypadInput();
         }
     }
+    return 0;
 }
 
 // Main gameplay function
 void playBlackjack(Balance userBalance, PmodOLEDrgb oledStruct) {
-    blackjackInit(); 
-
-    Bet currentBet;
+    CardSet cardSet; 
+    initCardSet(&cardSet, 1, SHOE_RATIO);
+    Card deckTemp[cardSet.cardsLeft];
+    cardSet.deck = deckTemp;
+    Card discardTemp[cardSet.cardsLeft];
+    cardSet.discardPile = discardTemp;
+    initCardsInSet(&cardSet);
     ShuffleStatus shuffleStatus;
 
-    printUART("Enter the amount you'd like to bet");
-    int betAmount = getAmtNoTimeout(); /* get bet amount from user */
-    if (!bet(&userBalance, betAmount, &currentBet)) {
-        return;
-    }
+    while(true)
+    {
+        Bet currentBet = {0};
+        printUART("Enter the amount you'd like to bet");
+        int betAmount = getAmtNoTimeout(); /* get bet amount from user */
+        if(betAmount == 0)
+        {
+            break;
+        }
 
-    Card playerCards[5];
-    Card dealerCards[5];
-    pullTopCard(&playerCards[0], &cardSet, &shuffleStatus);
-    pullTopCard(&dealerCards[0], &cardSet, &shuffleStatus);
-    pullTopCard(&playerCards[1], &cardSet, &shuffleStatus);
-    pullTopCard(&dealerCards[1], &cardSet, &shuffleStatus);
-    
-    int numPlayerCards = 2;
-    int numDealerCards = 2;
-    
-    displayPlayerHand(&oledStruct, playerCards, numPlayerCards);
-    displayDealerHand(&oledStruct, dealerCards, numDealerCards);
+        if (!bet(&userBalance, betAmount, &currentBet)) {
+            return;
+        }
 
-    bool playerHasBlackjack = isBlackjack(playerCards);
-    bool dealerHasBlackjack = isBlackjack(dealerCards);
+        Card playerCards[MAX_BJ_HAND];
+        Card dealerCards[MAX_BJ_HAND];
+        pullTopCard(&playerCards[0], &cardSet, &shuffleStatus);
+        pullTopCard(&dealerCards[0], &cardSet, &shuffleStatus);
+        pullTopCard(&playerCards[1], &cardSet, &shuffleStatus);
+        pullTopCard(&dealerCards[1], &cardSet, &shuffleStatus);
+        
+        int numPlayerCards = 2;
+        int numDealerCards = 2;
+        
+        displayPlayerHand(&oledStruct, playerCards, numPlayerCards);
+        displayDealerHand(&oledStruct, dealerCards, numDealerCards);
 
-    if (playerHasBlackjack && !dealerHasBlackjack) {
-        winBet(&userBalance, &currentBet, 3);
-        displayGameResult(&oledStruct, "Player wins with Blackjack!");
+        bool playerHasBlackjack = isBlackjack(playerCards);
+        bool dealerHasBlackjack = isBlackjack(dealerCards);
+
+        if (playerHasBlackjack && !dealerHasBlackjack) {
+            winBet(&userBalance, &currentBet, 2.5);
+            displayGameResult(&oledStruct, "Player wins with Blackjack!");
+            printBalance(&userBalance);
+            return;
+        }
+        else if (dealerHasBlackjack) {
+            displayGameResult(&oledStruct, "Dealer wins with Blackjack!");
+            printBalance(&userBalance);
+            return;
+        }
+        else if (playerHasBlackjack && dealerHasBlackjack) {
+            displayGameResult(&oledStruct, "Push: Both have Blackjack!");
+            printBalance(&userBalance);
+            return;
+        }
+
+        bool doubleDownOccurred = offerAndHandleDoubleDown(&oledStruct, playerCards, &numPlayerCards, &cardSet, &shuffleStatus, &currentBet, &userBalance);
+        unsigned int numSplitCards = 0;
+        bool splitOccurred = false;
+        Card splitCards[MAX_BJ_HAND];
+        if (!doubleDownOccurred) {
+            numSplitCards = offerAndHandleSplit(&oledStruct, playerCards, &numPlayerCards, &cardSet, &shuffleStatus, &currentBet, &userBalance, splitCards);
+            splitOccurred = numSplitCards != 0;
+        }
+
+        if (!playerHasBlackjack && !doubleDownOccurred && !splitOccurred) {
+            playerTurn(&oledStruct, playerCards, &numPlayerCards, &cardSet, &shuffleStatus);
+        }
+
+        if (calculateHandValue(playerCards, numPlayerCards) <= 21) {
+            dealerTurn(&oledStruct, dealerCards, &numDealerCards, &cardSet, &shuffleStatus);
+        }
+
+        bool playerWins = isPlayerWinner(playerCards, numPlayerCards, dealerCards, numDealerCards);
+        if (playerWins) {
+            winBet(&userBalance, &currentBet, 2);
+            displayGameResult(&oledStruct, "Player wins with ");
+            displayFullHand(&oledStruct, playerCards, numPlayerCards);
+        }
+        else {
+            bool push = isPush(playerCards, numPlayerCards, dealerCards, numDealerCards);
+            if(push)
+            {
+                winBet(&userBalance, &currentBet, 1);
+                displayGameResult(&oledStruct, "Player pushes with ");
+                displayFullHand(&oledStruct, playerCards, numPlayerCards);
+            }
+            else
+            {
+                displayGameResult(&oledStruct, "Dealer wins against ");
+                displayFullHand(&oledStruct, playerCards, numPlayerCards);
+            }
+        }
+
+        if(splitOccurred)
+        {
+            playerWins = isPlayerWinner(splitCards, numSplitCards, dealerCards, numDealerCards);
+            displayPlayerHand(&oledStruct, playerCards, numPlayerCards);
+            if (playerWins) {
+                winBet(&userBalance, &currentBet, 2);
+                displayGameResult(&oledStruct, "Player wins with ");
+                displayFullHand(&oledStruct, splitCards, numSplitCards);
+            }
+            else {
+                bool push = isPush(playerCards, numPlayerCards, dealerCards, numDealerCards);
+                if(push)
+                {
+                    winBet(&userBalance, &currentBet, 1);
+                    displayGameResult(&oledStruct, "Player pushes with ");
+                    displayFullHand(&oledStruct, splitCards, numSplitCards);
+                }
+                else
+                {
+                    displayGameResult(&oledStruct, "Dealer wins against ");
+                    displayFullHand(&oledStruct, splitCards, numSplitCards);
+                }
+            }
+        }
+
         printBalance(&userBalance);
-        return;
     }
-    else if (dealerHasBlackjack) {
-        displayGameResult(&oledStruct, "Dealer wins with Blackjack!");
-        printBalance(&userBalance);
-        return;
-    }
-    else if (playerHasBlackjack && dealerHasBlackjack) {
-        displayGameResult(&oledStruct, "Push: Both have Blackjack!");
-        printBalance(&userBalance);
-        return;
-    }
-
-    bool doubleDownOccurred = offerAndHandleDoubleDown(&oledStruct, playerCards, &numPlayerCards, &cardSet, &shuffleStatus, &currentBet, &userBalance);
-    if (!doubleDownOccurred) {
-        offerAndHandleSplit(&oledStruct, playerCards, &numPlayerCards, &cardSet, &shuffleStatus, &currentBet, &userBalance);
-    }
-
-    if (!playerHasBlackjack) {
-        playerTurn(&oledStruct, playerCards, &numPlayerCards, &cardSet, &shuffleStatus);
-    }
-    if (calculateHandValue(playerCards, numPlayerCards) <= 21) {
-        dealerTurn(&oledStruct, dealerCards, &numDealerCards, &cardSet, &shuffleStatus);
-    }
-
-    bool playerWins = isPlayerWinner(playerCards, numPlayerCards, dealerCards, numDealerCards);
-    if (playerWins) {
-        winBet(&userBalance, &currentBet, 2);
-        displayGameResult(&oledStruct, "Player wins!");
-    }
-    else {
-        displayGameResult(&oledStruct, "Dealer wins!");
-    }
-
-    printBalance(&userBalance);
-}
-
-// Initialization of the game state
-void blackjackInit() {
-    initCardSet(&cardSet, 1, SHOE_RATIO);
 }
