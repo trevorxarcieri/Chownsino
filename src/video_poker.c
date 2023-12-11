@@ -1,91 +1,83 @@
-#include "videopoker.h"
-
-#define MAX_HAND 5
-
-// Function Prototypes
-void dealInitialHand(Card* hand, CardSet* cardSet);
-void getHeldCards(bool* cardsToHold);
-void replaceDiscardedCards(Card* hand, CardSet* cardSet, bool* cardsToHold);
-void sortHandByValue(Card* hand);
-bool isPair(Card* hand);
-bool isTwoPair(Card* hand);
-bool isThreeOfAKind(Card* hand);
-bool isStraight(Card* hand);
-bool isFlush(Card* hand);
-bool isFullHouse(Card* hand);
-bool isFourOfAKind(Card* hand);
-bool isStraightFlush(Card* hand);
-bool isRoyalFlush(Card* hand);
-void displayHand(Card* hand);
-void displayBalance(Balance balance);
-void payoutWinnings(Balance* balance, Card* hand);
-void playVideoPoker(Balance* userBalance, CardSet* cardSet);
-void readStringUART(char* str, int maxLength);
+#include "video_poker.h"
 
 // Main Video Poker Function
 void playVideoPoker(Balance* userBalance, PmodOLEDrgb* oledStruct) {
-    // Ensure balance is sufficient for minimum bet
-    if (userBalance->balance < MIN_BET) {
-        printlnUART("Insufficient balance for betting.");
-        return;
-    }
+    CardSet cardSet; 
+    initCardSet(&cardSet, 1, VP_SHOE_RATIO);
+    Card deckTemp[cardSet.cardsLeft];
+    cardSet.deck = deckTemp;
+    Card discardTemp[cardSet.cardsLeft];
+    cardSet.discardPile = discardTemp;
+    initCardsInSet(&cardSet);
+    ShuffleStatus shuffleStatus;
+    while(true)
+    {
+        Bet currentBet = {0};
+        printUART("Enter the amount you'd like to bet");
+        int betAmount = getAmtNoTimeout(); /* get bet amount from user */
+        if(betAmount == 0)
+        {
+            break;
+        }
 
-    // Player places a bet
-    int betAmount = getBetAmount(userBalance);
-    if (betAmount <= 0) return; // Exit if no bet is placed or invalid bet
+        if (!bet(userBalance, betAmount, &currentBet)) {
+            continue;
+        }
 
-    Card hand[MAX_HAND];
-    bool cardsToHold[MAX_HAND] = { false };
+        Card hand[MAX_HAND];
+        bool cardsToHold[MAX_HAND] = { false };
 
-    // Deal initial hand
-    dealInitialHand(hand, &cardSet);
-    displayFullHand(oledStruct, hand, MAX_HAND);
+        // Deal initial hand
+        dealInitialHand(hand, &cardSet, shuffleStatus);
+        displayFullHand(oledStruct, hand, MAX_HAND);
 
-    // Player selects cards to hold
-    getHeldCards(cardsToHold);
-    replaceDiscardedCards(hand, &cardSet, cardsToHold);
-    displayFullHand(oledStruct, hand, MAX_HAND);
+        // Player selects cards to hold
+        getHeldCards(cardsToHold);
+        replaceDiscardedCards(hand, &cardSet, cardsToHold, shuffleStatus);
+        displayFullHand(oledStruct, hand, MAX_HAND);
 
-    // Final hand evaluation and payout
-    payoutWinnings(userBalance, hand, betAmount);
-    displayBalance(*userBalance);
-
-    // Ask if the player wants to play another round
-    askPlayAgain();
-}
-
-// Implementations
-int getBetAmount(Balance* userBalance) {
-    printUART("Enter bet amount: ");
-    int betAmount = readBetAmount(); // Implement this to read the bet amount
-    return (betAmount <= userBalance->balance && betAmount >= MIN_BET) ? betAmount : 0;
-}
-
-void askPlayAgain() {
-    printUART("Play again? (Y/N): ");
-    char decision = readKeypadInput(); // Use your input method
-    if (decision == 'Y' || decision == 'y') {
-        playVideoPoker(userBalance, oledStruct); // Recursive call to play again
+        // Final hand evaluation and payout
+        payoutWinnings(userBalance, hand, &currentBet);
+        printBalance(userBalance);
     }
 }
 
-void dealInitialHand(Card* hand, CardSet* cardSet) {
+void dealInitialHand(Card* hand, CardSet* cardSet, ShuffleStatus shuffleStatus) {
     for (int i = 0; i < MAX_HAND; i++) {
-        pullTopCard(&hand[i], cardSet, &shuffleStatus); // Use your Blackjack function
+        pullTopCard(&hand[i], cardSet, &shuffleStatus); // Use Blackjack function
     }
 }
 
 void getHeldCards(bool* cardsToHold) {
-    printlnUART("Choose cards to hold (e.g., '135' for cards 1, 3, 5):");
-    char input[6];
-    readStringUART(input, sizeof(input));
-
-    for (int i = 0; i < MAX_HAND; i++) {
-        cardsToHold[i] = strchr(input, '1' + i) != NULL;
+    printlnUART("Choose cards to hold (1-5, press any other key to stop):");
+    while(true)
+    {
+        char key = readKeypadInput();
+        if(key == 0)
+            continue;
+        int i = key - '0';
+        if (i <= MAX_HAND && i > 0)
+        {
+            cardsToHold[i - 1] = !cardsToHold[i - 1];
+            if(cardsToHold[i - 1])
+            {
+                printUART("Now holding card ");
+            }
+            else
+            {
+                printUART("Now unholding card ");
+            }
+            UART4_putchar(key);
+            printlnUART("");
+        }
+        else 
+        {
+            break;
+        }
     }
 }
 
-void replaceDiscardedCards(Card* hand, CardSet* cardSet, bool* cardsToHold) {
+void replaceDiscardedCards(Card* hand, CardSet* cardSet, bool* cardsToHold, ShuffleStatus shuffleStatus) {
     for (int i = 0; i < MAX_HAND; i++) {
         if (!cardsToHold[i]) {
             pullTopCard(&hand[i], cardSet, &shuffleStatus);
@@ -170,46 +162,58 @@ bool isRoyalFlush(Card* hand) {
     return isStraightFlush(hand) && hand[0].value == TEN && hand[4].value == ACE;
 }
 
-// Function to display a card's value and suit
-void printCard(Card card) {
-    char cardStr[20]; 
-    sprintf(cardStr, "%s of %s", valueToString(card.value), suitToString(card.suit));
-    printUART(cardStr); // Replace with your project's function to print to your output
-}
-
-void displayFullHand(PmodOLEDrgb* oledStruct, Card* cards, int numCards) {
-    printUART("Hand: ");
-    for (int i = 0; i < numCards; i++) {
-        displayCard(oledStruct, cards[i], 0);
-        if (i < numCards - 1) {
-            printUART(", ");
-        }
-    }
-    printlnUART("");
-}
-
-void displayBalance(Balance balance) {
-    char balanceStr[20];
-    sprintf(balanceStr, "Balance: %d", balance.balance);
-    printlnUART(balanceStr);
-}
-
-void payoutWinnings(Balance* balance, Card* hand) {
+void payoutWinnings(Balance* balance, Card* hand, Bet* bet) {
     int multiplier = 0;
 
-    if (isRoyalFlush(hand)) multiplier = 800;
-    // ... other hand checks ...
-    else if (isPair(hand)) multiplier = 1;
-
-    int winnings = currentBet * multiplier; // currentBet should be set in your gameplay
-    addToBalance(balance, winnings);
-}
-
-void readStringUART(char* str, int maxLength) {
-    int count = 0;
-    char ch;
-    while ((ch = UART_getChar()) != '\n' && ch != '\r' && count < maxLength - 1) {
-        str[count++] = ch;
+    if (isRoyalFlush(hand))
+    {
+        multiplier = ROYAL_FLUSH_MULT;
+        printlnUART("Royal flush!");
     }
-    str[count] = '\0'; // Null-terminate the string
+    else if (isStraightFlush(hand))
+    {
+        multiplier = STRAIGHT_FLUSH_MULT;
+        printlnUART("Straight flush!");
+    }
+    else if (isFourOfAKind(hand))
+    {
+        multiplier = FOUR_KIND_MULT;
+        printlnUART("Four of a kind!");
+    }
+    else if (isFullHouse(hand))
+    {
+        multiplier = FULL_HOUSE_MULT;
+        printlnUART("Full house!");
+    }
+    else if (isFlush(hand))
+    {
+        multiplier = FLUSH_MULT;
+        printlnUART("Flush!");
+    }
+    else if (isStraight(hand))
+    {
+        multiplier = STRAIGHT_MULT;
+        printlnUART("Straight!");
+    }
+    else if (isThreeOfAKind(hand))
+    {
+        multiplier = THREE_KIND_MULT;
+        printlnUART("Three of a kind!");
+    }
+    else if (isTwoPair(hand))
+    {
+        multiplier = TWO_PAIR_MULT;
+        printlnUART("Two pair!");
+    }
+    else if (isPair(hand))
+    {
+        multiplier = PAIR_MULT;
+        printlnUART("Pair!");
+    }
+    else
+    {
+        printlnUART("No winning arrangement.");
+    }
+
+    winBet(balance, bet, multiplier);
 }

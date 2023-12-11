@@ -46,6 +46,7 @@
         <itemPath>../include/oled_images.h</itemPath>
         <itemPath>../include/output_wrapper.h</itemPath>
         <itemPath>../include/blackjack.h</itemPath>
+        <itemPath>../include/video_poker.h</itemPath>
       </logicalFolder>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
@@ -81,6 +82,7 @@
         <itemPath>../src/output_wrapper.c</itemPath>
         <itemPath>../src/blackjack.c</itemPath>
         <itemPath>../src/roulette.c</itemPath>
+        <itemPath>../src/video_poker.c</itemPath>
       </logicalFolder>
       <itemPath>../main.c</itemPath>
     </logicalFolder>

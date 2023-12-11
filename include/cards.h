@@ -18,6 +18,7 @@
 #include <stdlib.h>
 #include "card.h"
 #include "randomization.h"
+#include "PmodOLEDrgb.h"
 
 typedef struct {
     int numDecks;

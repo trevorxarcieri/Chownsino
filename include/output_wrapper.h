@@ -38,6 +38,7 @@ void cleanupOutput(PmodOLEDrgb* oledStruct);
 
 void displayCard(PmodOLEDrgb* oledStruct, Card card, int centerPosition);
 void displayCards(PmodOLEDrgb* oledStruct, int numCards, int topLeftPosition, Card* cards);
+void displayFullHand(PmodOLEDrgb* oledStruct, Card* cards, int numCards);
 
 void displaySquare(PmodOLEDrgb* oledStruct, int x, int y, RouletteSquare square);
 void displaySquares(PmodOLEDrgb* oledStruct, int x, int y, int numSquares, RouletteSquare* squares);

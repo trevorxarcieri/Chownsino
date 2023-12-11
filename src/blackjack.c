@@ -10,16 +10,6 @@ void displayFullDealerHand(PmodOLEDrgb* oledStruct, Card* cards, int numCards) {
     displayFullHand(oledStruct, cards, numCards);
 }
 
-void displayFullHand(PmodOLEDrgb* oledStruct, Card* cards, int numCards) {
-    for(int i = 0; i < numCards - 1; i++)
-    {
-        displayCard(oledStruct, cards[i], 0);
-        printUART(", ");
-    }
-    displayCard(oledStruct, cards[numCards - 1], 0);
-    printlnUART("");
-}
-
 void displayDealerHand(PmodOLEDrgb* oledStruct, Card* cards, int numCards) {
     printUART("Dealer Hand: ");
     displayCard(oledStruct, cards[0], 0);
@@ -179,7 +169,7 @@ int offerAndHandleSplit(PmodOLEDrgb* oledStruct, Card* playerCards, int* numCard
 // Main gameplay function
 void playBlackjack(Balance userBalance, PmodOLEDrgb oledStruct) {
     CardSet cardSet; 
-    initCardSet(&cardSet, 1, SHOE_RATIO);
+    initCardSet(&cardSet, 1, BJ_SHOE_RATIO);
     Card deckTemp[cardSet.cardsLeft];
     cardSet.deck = deckTemp;
     Card discardTemp[cardSet.cardsLeft];
@@ -198,7 +188,7 @@ void playBlackjack(Balance userBalance, PmodOLEDrgb oledStruct) {
         }
 
         if (!bet(&userBalance, betAmount, &currentBet)) {
-            return;
+            continue;
         }
 
         Card playerCards[MAX_BJ_HAND];
@@ -275,7 +265,6 @@ void playBlackjack(Balance userBalance, PmodOLEDrgb oledStruct) {
         if(splitOccurred)
         {
             playerWins = isPlayerWinner(splitCards, numSplitCards, dealerCards, numDealerCards);
-            displayPlayerHand(&oledStruct, playerCards, numPlayerCards);
             if (playerWins) {
                 winBet(&userBalance, &currentBet, 2);
                 displayGameResult(&oledStruct, "Player wins with ");

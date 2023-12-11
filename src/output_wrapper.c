@@ -65,6 +65,17 @@ void displayCard(PmodOLEDrgb* oledStruct, Card card, int centerPosition) {
     printUART((uint8_t*)suitStr);
 }
 
+void displayFullHand(PmodOLEDrgb* oledStruct, Card* cards, int numCards) {
+    for(int i = 0; i < numCards - 1; i++)
+    {
+        displayCard(oledStruct, cards[i], 0);
+        printUART(", ");
+    }
+    displayCard(oledStruct, cards[numCards - 1], 0);
+    printlnUART("");
+}
+
+
 void displayCards(PmodOLEDrgb* oledStruct, int numCards, int topLeftPosition, Card* cards) {
     // Implement display logic using UART for now
     //TODO: change display to OLED

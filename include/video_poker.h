@@ -7,7 +7,7 @@
     implement the video poker module.
 
   @Author
-    Your Name
+    Trevor Arcieri and Nicholas Chown
 
  */
  /* ************************************************************************** */
@@ -25,16 +25,25 @@
 #include "randomization.h"
 
 #define MAX_HAND 5
+#define VP_SHOE_RATIO 0.6
+
+#define ROYAL_FLUSH_MULT 250
+#define STRAIGHT_FLUSH_MULT 50
+#define FOUR_KIND_MULT 25
+#define FULL_HOUSE_MULT 9
+#define FLUSH_MULT 6
+#define STRAIGHT_MULT 4
+#define THREE_KIND_MULT 3
+#define TWO_PAIR_MULT 2
+#define PAIR_MULT 1
 
 void playVideoPoker(Balance* userBalance, PmodOLEDrgb* oledStruct);
 
-void dealInitialHand(Card* hand, CardSet* cardSet);
+void dealInitialHand(Card* hand, CardSet* cardSet, ShuffleStatus ShuffleStatus);
 void getHeldCards(bool* cardsToHold);
-void replaceDiscardedCards(Card* hand, CardSet* cardSet, bool* cardsToHold);
+void replaceDiscardedCards(Card* hand, CardSet* cardSet, bool* cardsToHold, ShuffleStatus ShuffleStatus);
 void sortHandByValue(Card* hand);
-int getBetAmount(Balance* userBalance);
-void askPlayAgain();
-void payoutWinnings(Balance* balance, Card* hand, int betAmount);
+void payoutWinnings(Balance* balance, Card* hand, Bet* bet);
 
 bool isPair(Card* hand);
 bool isTwoPair(Card* hand);
@@ -45,9 +54,5 @@ bool isFullHouse(Card* hand);
 bool isFourOfAKind(Card* hand);
 bool isStraightFlush(Card* hand);
 bool isRoyalFlush(Card* hand);
-
-void displayFullHand(PmodOLEDrgb* oledStruct, Card* cards, int numCards);
-void payoutWinnings(Balance* balance, Card* hand);
-
 
 #endif

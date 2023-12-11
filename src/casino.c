@@ -135,8 +135,7 @@ void viewGames(Balance balance, PmodOLEDrgb oledStruct)
                 playRoulette(&balance);
                 break;
             case '3':
-                //TODO: implement
-                // playVPoker();
+                playVideoPoker(&balance, &oledStruct);
                 break;
             case '4':
                 running = 0;

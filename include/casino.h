@@ -21,6 +21,7 @@
 #include "randomization.h"
 #include "blackjack.h"
 #include "roulette.h"
+#include "video_poker.h"
 
 void initCasino(PmodOLEDrgb* oledStruct);
 void cleanupCasino(PmodOLEDrgb* oledStruct);

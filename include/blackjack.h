@@ -24,7 +24,7 @@
 #include "output_wrapper.h"
 #include "randomization.h"
 
-#define SHOE_RATIO 0.6
+#define BJ_SHOE_RATIO 0.6
 
 #define MAX_BJ_HAND 5
 
@@ -32,7 +32,6 @@ void playBlackjack(Balance userBalance, PmodOLEDrgb oledStruct);
 
 void displayPlayerHand(PmodOLEDrgb* oledStruct, Card* cards, int numCards);
 void displayFullDealerHand(PmodOLEDrgb* oledStruct, Card* cards, int numCards);
-void displayFullHand(PmodOLEDrgb* oledStruct, Card* cards, int numCards);
 void displayDealerHand(PmodOLEDrgb* oledStruct, Card* cards, int numCards);
 void displayGameResult(PmodOLEDrgb* oledStruct, const char* result);
 
