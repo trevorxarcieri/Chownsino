@@ -74,7 +74,7 @@ void displayCards(PmodOLEDrgb* oledStruct, int numCards, int topLeftPosition, Ca
     }
 }
 
-void displayOLEDText(PmodOLEDrgb* oledStruct, int x, int y, const char* text) {
+void displayOLEDText(PmodOLEDrgb* oledStruct, int x, int y, unsigned char* text) {
     OLEDrgb_SetCursor(oledStruct, x, y);
     OLEDrgb_PutString(oledStruct, (char *) &text);
 }
@@ -86,7 +86,7 @@ void eraseOLEDText(PmodOLEDrgb* oledStruct, int x, int y, int length) {
     }
 }
 
-void displayLCDText(int row, const char* text)
+void displayLCDText(int row, unsigned char* text)
 {
     LCD_WriteStringAtPos((char *) text, row, 0);
 }
@@ -96,20 +96,20 @@ void eraseLCDText()
     LCD_DisplayClear();
 }
 
-void printlnUART(const char* text)
+void printlnUART(unsigned char *text)
 {
-    UART4_putstr((uint8_t *) text);
-    UART4_putchar('\n');
+    UART4_putstr((unsigned char*) text);
+    UART4_putstr("\n\r");
 }
-void printUART(const char* text)
+void printUART(unsigned char *text)
 {
-    UART4_putstr((uint8_t *) text);
+    UART4_putstr((unsigned char*) text);
 }
 
 void displaySquare(PmodOLEDrgb* oledStruct, int x, int y, RouletteSquare square) {
     // Assuming square.color is the color and square.text is the string
     OLEDrgb_DrawRectangle(oledStruct, x, y, x + SQUARE_WIDTH, y + SQUARE_HEIGHT, square.color, 1, square.color);
-    displayOLEDText(oledStruct, x + 2, y + 2, square.text);
+    displayOLEDText(oledStruct, x + 2, y + 2, (unsigned char *) square.text);
 }
 
 void displaySquares(PmodOLEDrgb* oledStruct, int x, int y, int numSquares, RouletteSquare* squares) {

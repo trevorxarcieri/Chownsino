@@ -5,7 +5,7 @@
 #include "config_bits.h"
 #include "casino.h"
 
-int main(int argc, char** argv) 
+int main()
 {
     startCasino();
     while(1);

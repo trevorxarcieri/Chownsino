@@ -32,7 +32,7 @@
 //UART4 interfacing function prototypes    
 void initUART4(void);
 void UART4_putchar(uint8_t c);
-void UART4_putstr(uint8_t *s);
+void UART4_putstr(uint8_t s[]);
 
 #endif /* _UART_H */
 

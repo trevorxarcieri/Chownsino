@@ -32,6 +32,7 @@ void UART4_putchar(uint8_t c) { //send a character to UART1
     while (U4STAbits.UTXBF == 1); //wait until transmitter buffer becomes empty
     U4TXREG = c;    //write character to TX data register
 }
+
 void UART4_putstr(uint8_t s[]) { //send a null-terminated string to UART1
     while (s[0] != 0) {
         UART4_putchar(s[0]);

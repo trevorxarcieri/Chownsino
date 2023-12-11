@@ -79,7 +79,7 @@ void adminModBalance(Balance* balance, Sign sign) {
                 }
             }
 
-            unsigned int amountToAdd = (sign * -1) * amtFromStr(amountStr, amountIndex);
+            unsigned int amountToAdd = (sign ? -1 : 1) * amtFromStr(amountStr, amountIndex);
 
             // Add the amount to the user balance
             balance->balance += amountToAdd;
@@ -117,8 +117,8 @@ void printBalance(Balance* balance)
 {
     int balanceNum = balance->balance;
     char str[MAX_AMT_LENGTH + 1];
-    str[0] = '\0';
-    str[1] = '0';
+    str[0] = '0';
+    str[1] = '\0';
     for(int i = 1; i < MAX_AMT_LENGTH + 1 && balanceNum != 0; i++)
     {
         for(int j = i; j > 0; j--)
@@ -126,6 +126,7 @@ void printBalance(Balance* balance)
             str[j] = str[j - 1]; 
         }
         str[0] = '0' + balanceNum % 10;
+        str[i] = '\0';
         balanceNum /= 10;
     }
     printUART(str);

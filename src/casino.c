@@ -32,9 +32,8 @@ void cleanupCasino(PmodOLEDrgb* oledStruct) {
 // Function to ask the user if they are over 21 using UART
 int askUserAge() {
     printlnUART("Are you over 21? Press 'A' for Yes, 'B' for No.");
-
     while (1) {
-        char userInput = readKey();
+        char userInput = readKeypadInput();
 
         if (userInput == 'A') {
             return 1;  // User is over 21
@@ -57,8 +56,8 @@ void startCasino() {
 
         int running = 1;
 
-        Balance *userBalance;
-        initBalance(userBalance);
+        Balance userBalance = (const Balance){0};
+        initBalance(&userBalance);
 
         while (running) {
             // Display options for the user
@@ -69,23 +68,29 @@ void startCasino() {
             printlnUART("4. View Casino Games");
             printlnUART("Enter your choice: ");
 
-            char choice = readKey();
+            char choice = readKeypadInput();
+            while(choice == 0)
+                choice = readKeypadInput();
 
             switch (choice) {
                 case '1':
                     // Cash in using the adminModBalance function
-                    adminModBalance(userBalance, POSITIVE);
+                    adminModBalance(&userBalance, POSITIVE);
                     printlnUART("Cash In Successful.");
                     break;
                 case '2':
                     // Cash out
-                    adminModBalance(userBalance, NEGATIVE);
+                    adminModBalance(&userBalance, NEGATIVE);
                     break;
                 case '3':
                     // Exit if the user balance is 0
-                    if (userBalance == 0) {
+                    if (userBalance.balance == 0)
+                    {
                         running = 0;
+                        printlnUART("Don't leave yet! You still have Chowncoin left!");
                     }
+                    else
+                        printlnUART("Don't leave yet! You still have Chowncoin left!");
                     break;
                 case '4':
                     // View casino games

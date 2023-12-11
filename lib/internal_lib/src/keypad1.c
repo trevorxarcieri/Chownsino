@@ -38,9 +38,8 @@ unsigned char keys[4][4] = {{'1','2','3', 'A'},
 //of the Basys MX3 board (refer to the reference manual)
 
 void initKeypad(void) {   
-    //configure pins that support analog functions to operate in digital mode
-    ANSELDCLR = 0x0002;       //configure PORTD pin 1 as digital
-
+    ANSELGCLR = 0x03C0;       //configure PORTG pins 6, 7, 8, and 9 as digital
+    
     //configure directions of pins
     //configure the columns as outputs and the rows as inputs
     col1_dir = OUT;
