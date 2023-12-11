@@ -1,104 +1,100 @@
-#include "video_poker.h"
+#include "videopoker.h"
 
-void playVideoPoker(Balance* balance) {
+#define MAX_HAND 5
+
+// Function Prototypes
+void dealInitialHand(Card* hand, CardSet* cardSet);
+void getHeldCards(bool* cardsToHold);
+void replaceDiscardedCards(Card* hand, CardSet* cardSet, bool* cardsToHold);
+void sortHandByValue(Card* hand);
+bool isPair(Card* hand);
+bool isTwoPair(Card* hand);
+bool isThreeOfAKind(Card* hand);
+bool isStraight(Card* hand);
+bool isFlush(Card* hand);
+bool isFullHouse(Card* hand);
+bool isFourOfAKind(Card* hand);
+bool isStraightFlush(Card* hand);
+bool isRoyalFlush(Card* hand);
+void displayHand(Card* hand);
+void displayBalance(Balance balance);
+void payoutWinnings(Balance* balance, Card* hand);
+void playVideoPoker(Balance* userBalance, CardSet* cardSet);
+void readStringUART(char* str, int maxLength);
+
+// Main Video Poker Function
+void playVideoPoker(Balance* userBalance, PmodOLEDrgb* oledStruct) {
+    // Ensure balance is sufficient for minimum bet
+    if (userBalance->balance < MIN_BET) {
+        printlnUART("Insufficient balance for betting.");
+        return;
+    }
+
+    // Player places a bet
+    int betAmount = getBetAmount(userBalance);
+    if (betAmount <= 0) return; // Exit if no bet is placed or invalid bet
+
     Card hand[MAX_HAND];
-    CardDeck deck;
+    bool cardsToHold[MAX_HAND] = { false };
 
-    initDeck(&deck); // Initialize and shuffle the deck
-    dealInitialHand(hand, &deck); // Deal the initial hand
-    displayHand(hand); // Display the initial hand
+    // Deal initial hand
+    dealInitialHand(hand, &cardSet);
+    displayFullHand(oledStruct, hand, MAX_HAND);
 
-    playerChoices(hand, &deck); // Allow player to choose cards to hold
-    displayHand(hand); // Display the final hand
+    // Player selects cards to hold
+    getHeldCards(cardsToHold);
+    replaceDiscardedCards(hand, &cardSet, cardsToHold);
+    displayFullHand(oledStruct, hand, MAX_HAND);
 
-    HandRanking ranking = evaluateHand(hand); // Evaluate the final hand
-    payoutWinnings(balance, ranking); // Payout based on the hand ranking
+    // Final hand evaluation and payout
+    payoutWinnings(userBalance, hand, betAmount);
+    displayBalance(*userBalance);
+
+    // Ask if the player wants to play another round
+    askPlayAgain();
 }
 
-void dealInitialHand(Card* hand, CardDeck* deck) {
-    for (int i = 0; i < MAX_HAND; i++) {
-        hand[i] = drawCard(deck); // Draw a card from the deck
+// Implementations
+int getBetAmount(Balance* userBalance) {
+    printUART("Enter bet amount: ");
+    int betAmount = readBetAmount(); // Implement this to read the bet amount
+    return (betAmount <= userBalance->balance && betAmount >= MIN_BET) ? betAmount : 0;
+}
+
+void askPlayAgain() {
+    printUART("Play again? (Y/N): ");
+    char decision = readKeypadInput(); // Use your input method
+    if (decision == 'Y' || decision == 'y') {
+        playVideoPoker(userBalance, oledStruct); // Recursive call to play again
     }
 }
 
-void playerChoices(Card* hand, CardDeck* deck) {
-        printlnUART("Choose cards to hold (e.g., '135' to hold cards 1, 3, and 5):");
-        char choices[6]; // Buffer for player choices
-        readString(choices, sizeof(choices)); // Read player choices
+void dealInitialHand(Card* hand, CardSet* cardSet) {
+    for (int i = 0; i < MAX_HAND; i++) {
+        pullTopCard(&hand[i], cardSet, &shuffleStatus); // Use your Blackjack function
+    }
+}
+
+void getHeldCards(bool* cardsToHold) {
+    printlnUART("Choose cards to hold (e.g., '135' for cards 1, 3, 5):");
+    char input[6];
+    readStringUART(input, sizeof(input));
 
     for (int i = 0; i < MAX_HAND; i++) {
-        if (strchr(choices, '1' + i) == NULL) {
-            hand[i] = drawCard(deck); // Replace unheld cards
+        cardsToHold[i] = strchr(input, '1' + i) != NULL;
+    }
+}
+
+void replaceDiscardedCards(Card* hand, CardSet* cardSet, bool* cardsToHold) {
+    for (int i = 0; i < MAX_HAND; i++) {
+        if (!cardsToHold[i]) {
+            pullTopCard(&hand[i], cardSet, &shuffleStatus);
         }
     }
 }
 
-HandRanking evaluateHand(Card* hand) {
-    sortHand(hand); // Sort the hand for evaluation
-    // Check for each type of poker hand
-    if (isRoyalFlush(hand)) return ROYAL_FLUSH;
-    if (isStraightFlush(hand)) return STRAIGHT_FLUSH;
-    if (isFourOfAKind(hand)) return FOUR_OF_A_KIND;
-    if (isFullHouse(hand)) return FULL_HOUSE;
-    if (isFlush(hand)) return FLUSH;
-    if (isStraight(hand)) return STRAIGHT;
-    if (isThreeOfAKind(hand)) return THREE_OF_A_KIND;
-    if (isTwoPair(hand)) return TWO_PAIR;
-    if (isOnePair(hand)) return ONE_PAIR;
-    return HIGH_CARD; // If no other hand, it's a high card
-}
-
-void payoutWinnings(Balance* balance, HandRanking handRanking) {
-    int payoutMultiplier = 0;
-    switch (handRanking) {
-    case ROYAL_FLUSH: payoutMultiplier = 800; break;
-    case STRAIGHT_FLUSH: payoutMultiplier = 50; break;
-    case FOUR_OF_A_KIND: payoutMultiplier = 25; break;
-    case FULL_HOUSE: payoutMultiplier = 9; break;
-    case FLUSH: payoutMultiplier = 6; break;
-    case STRAIGHT: payoutMultiplier = 4; break;
-    case THREE_OF_A_KIND: payoutMultiplier = 3; break;
-    case TWO_PAIR: payoutMultiplier = 2; break;
-    case ONE_PAIR: payoutMultiplier = 1; break;
-    default: payoutMultiplier = 0; break; // No payout for high card
-    }
-    int winnings = /* bet amount */ *payoutMultiplier; // Replace with the actual bet amount
-    addToBalance(balance, winnings);
-}
-
-void displayHand(Card* hand) {
-    for (int i = 0; i < MAX_HAND; i++) {
-        char cardStr[MAX_CARD_STRING_LENGTH];
-        cardToString(&hand[i], cardStr); // Convert card to string
-        printlnUART(cardStr); // Display the card
-    }
-}
-
-void readString(char* str, int maxLength) {
-    void readString(char* str, int maxLength) {
-        int count = 0;
-        char ch;
-
-        while (true) {
-            ch = UART_getChar(); // Get a character from UART
-
-            // Check for newline or carriage return (end of input)
-            if (ch == '\n' || ch == '\r') {
-                break;
-            }
-
-            // Store the character if there's space in the buffer
-            if (count < maxLength - 1) {
-                str[count++] = ch;
-            }
-        }
-
-        str[count] = '\0'; // Null-terminate the string
-    }
-}
-
-void sortHand(Card* hand) {
-    // Simple Bubble Sort implementation to sort the cards
+// Helper function to sort the hand by card values
+void sortHandByValue(Card* hand) {
     for (int i = 0; i < MAX_HAND - 1; i++) {
         for (int j = 0; j < MAX_HAND - i - 1; j++) {
             if (hand[j].value > hand[j + 1].value) {
@@ -110,83 +106,110 @@ void sortHand(Card* hand) {
     }
 }
 
-bool isRoyalFlush(Card* hand) {
-    // Check if the hand is a royal flush
-    return isStraightFlush(hand) && hand[0].value == ACE && hand[4].value == KING;
-}
-
-bool isStraightFlush(Card* hand) {
-    // Check if the hand is a straight flush
-    return isStraight(hand) && isFlush(hand);
-}
-
-bool isFourOfAKind(Card* hand) {
-    // Check if the hand has four cards of the same value
-    return (hand[0].value == hand[3].value) || (hand[1].value == hand[4].value);
-}
-
-bool isFullHouse(Card* hand) {
-    // Check if the hand is a full house
-    bool threeFirstTwoLast = (hand[0].value == hand[2].value) && (hand[3].value == hand[4].value);
-    bool twoFirstThreeLast = (hand[0].value == hand[1].value) && (hand[2].value == hand[4].value);
-    return threeFirstTwoLast || twoFirstThreeLast;
-}
-
-bool isFlush(Card* hand) {
-    // Check if all cards have the same suit
-    Suit firstSuit = hand[0].suit;
-    for (int i = 1; i < MAX_HAND; i++) {
-        if (hand[i].suit != firstSuit) {
-            return false;
-        }
-    }
-    return true;
-}
-
-bool isStraight(Card* hand) {
-    // Check if the hand contains five consecutive cards
+bool isPair(Card* hand) {
+    sortHandByValue(hand);
     for (int i = 0; i < MAX_HAND - 1; i++) {
-        if (hand[i].value + 1 != hand[i + 1].value) {
-            return false;
-        }
-    }
-    return true;
-}
-
-bool isThreeOfAKind(Card* hand) {
-    // Check if the hand has three cards of the same value
-    for (int i = 0; i < 3; i++) {
-        if (hand[i].value == hand[i + 1].value && hand[i].value == hand[i + 2].value) {
-            return true;
-        }
+        if (hand[i].value == hand[i + 1].value) return true;
     }
     return false;
 }
 
 bool isTwoPair(Card* hand) {
-    // Check if the hand has two pairs
-    int pairCount = 0;
+    sortHandByValue(hand);
+    int pairs = 0;
     for (int i = 0; i < MAX_HAND - 1; i++) {
         if (hand[i].value == hand[i + 1].value) {
-            pairCount++;
+            pairs++;
             i++;
         }
     }
-    return pairCount == 2;
+    return pairs == 2;
 }
 
-bool isOnePair(Card* hand) {
-    // Check if the hand has a single pair
-    for (int i = 0; i < MAX_HAND - 1; i++) {
-        if (hand[i].value == hand[i + 1].value) {
-            return true;
-        }
+bool isThreeOfAKind(Card* hand) {
+    sortHandByValue(hand);
+    for (int i = 0; i < MAX_HAND - 2; i++) {
+        if (hand[i].value == hand[i + 1].value && hand[i].value == hand[i + 2].value) return true;
     }
     return false;
 }
 
-void cardToString(const Card* card, char* cardStr) {
-    char* values[] = { "Ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King" };
-    char* suits[] = { "Hearts", "Diamonds", "Clubs", "Spades" };
-    sprintf(cardStr, "%s of %s", values[card->value - 1], suits[card->suit]);
+bool isStraight(Card* hand) {
+    sortHandByValue(hand);
+    for (int i = 0; i < MAX_HAND - 1; i++) {
+        if (hand[i].value + 1 != hand[i + 1].value) return false;
+    }
+    return true;
+}
+
+bool isFlush(Card* hand) {
+    Suit firstSuit = hand[0].suit;
+    for (int i = 1; i < MAX_HAND; i++) {
+        if (hand[i].suit != firstSuit) return false;
+    }
+    return true;
+}
+
+bool isFullHouse(Card* hand) {
+    sortHandByValue(hand);
+    bool threeFirstTwoLast = (hand[0].value == hand[2].value) && (hand[3].value == hand[4].value);
+    bool twoFirstThreeLast = (hand[0].value == hand[1].value) && (hand[2].value == hand[4].value);
+    return threeFirstTwoLast || twoFirstThreeLast;
+}
+
+bool isFourOfAKind(Card* hand) {
+    sortHandByValue(hand);
+    return (hand[0].value == hand[3].value) || (hand[1].value == hand[4].value);
+}
+
+bool isStraightFlush(Card* hand) {
+    return isStraight(hand) && isFlush(hand);
+}
+
+bool isRoyalFlush(Card* hand) {
+    return isStraightFlush(hand) && hand[0].value == TEN && hand[4].value == ACE;
+}
+
+// Function to display a card's value and suit
+void printCard(Card card) {
+    char cardStr[20]; 
+    sprintf(cardStr, "%s of %s", valueToString(card.value), suitToString(card.suit));
+    printUART(cardStr); // Replace with your project's function to print to your output
+}
+
+void displayFullHand(PmodOLEDrgb* oledStruct, Card* cards, int numCards) {
+    printUART("Hand: ");
+    for (int i = 0; i < numCards; i++) {
+        displayCard(oledStruct, cards[i], 0);
+        if (i < numCards - 1) {
+            printUART(", ");
+        }
+    }
+    printlnUART("");
+}
+
+void displayBalance(Balance balance) {
+    char balanceStr[20];
+    sprintf(balanceStr, "Balance: %d", balance.balance);
+    printlnUART(balanceStr);
+}
+
+void payoutWinnings(Balance* balance, Card* hand) {
+    int multiplier = 0;
+
+    if (isRoyalFlush(hand)) multiplier = 800;
+    // ... other hand checks ...
+    else if (isPair(hand)) multiplier = 1;
+
+    int winnings = currentBet * multiplier; // currentBet should be set in your gameplay
+    addToBalance(balance, winnings);
+}
+
+void readStringUART(char* str, int maxLength) {
+    int count = 0;
+    char ch;
+    while ((ch = UART_getChar()) != '\n' && ch != '\r' && count < maxLength - 1) {
+        str[count++] = ch;
+    }
+    str[count] = '\0'; // Null-terminate the string
 }

@@ -1,37 +1,53 @@
-#ifndef VIDEO_POKER_H
-#define VIDEO_POKER_H
+/* ************************************************************************** */
+/** @File Name
+    videopoker.h
 
+  @Description
+    This file groups the declarations of the functions and structures that
+    implement the video poker module.
+
+  @Author
+    Your Name
+
+ */
+ /* ************************************************************************** */
+
+#ifndef VIDEOPOKER_H
+#define VIDEOPOKER_H
+
+#include <stdbool.h>
 #include "balance.h"
+#include "bet.h"
 #include "card.h"
-#include "randomization.h"
+#include "cards.h"
 #include "input_wrapper.h"
 #include "output_wrapper.h"
+#include "randomization.h"
 
 #define MAX_HAND 5
-#define MAX_CARD_STRING_LENGTH 20
 
-typedef enum {
-    HIGH_CARD, ONE_PAIR, TWO_PAIR, THREE_OF_A_KIND, STRAIGHT, FLUSH,
-    FULL_HOUSE, FOUR_OF_A_KIND, STRAIGHT_FLUSH, ROYAL_FLUSH
-} HandRanking;
+void playVideoPoker(Balance* userBalance, PmodOLEDrgb* oledStruct);
 
-void playVideoPoker(Balance* balance);
-void dealInitialHand(Card* hand, CardDeck* deck);
-void playerChoices(Card* hand, CardDeck* deck);
-HandRanking evaluateHand(Card* hand);
-void payoutWinnings(Balance* balance, HandRanking handRanking);
-void displayHand(Card* hand);
-void readString(char* str, int maxLength);
-void sortHand(Card* hand);
-bool isRoyalFlush(Card* hand);
-bool isStraightFlush(Card* hand);
-bool isFourOfAKind(Card* hand);
-bool isFullHouse(Card* hand);
-bool isFlush(Card* hand);
-bool isStraight(Card* hand);
-bool isThreeOfAKind(Card* hand);
+void dealInitialHand(Card* hand, CardSet* cardSet);
+void getHeldCards(bool* cardsToHold);
+void replaceDiscardedCards(Card* hand, CardSet* cardSet, bool* cardsToHold);
+void sortHandByValue(Card* hand);
+int getBetAmount(Balance* userBalance);
+void askPlayAgain();
+void payoutWinnings(Balance* balance, Card* hand, int betAmount);
+
+bool isPair(Card* hand);
 bool isTwoPair(Card* hand);
-bool isOnePair(Card* hand);
-void cardToString(const Card* card, char* cardStr);
+bool isThreeOfAKind(Card* hand);
+bool isStraight(Card* hand);
+bool isFlush(Card* hand);
+bool isFullHouse(Card* hand);
+bool isFourOfAKind(Card* hand);
+bool isStraightFlush(Card* hand);
+bool isRoyalFlush(Card* hand);
 
-#endif // VIDEO_POKER_H
+void displayFullHand(PmodOLEDrgb* oledStruct, Card* cards, int numCards);
+void payoutWinnings(Balance* balance, Card* hand);
+
+
+#endif

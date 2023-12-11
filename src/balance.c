@@ -144,4 +144,5 @@ void printInt(int num, int digits)
         num /= 10;
     }
     printUART(str);
+    printlnUART(" Chowncoin");
 }
