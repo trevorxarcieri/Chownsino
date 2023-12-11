@@ -15,18 +15,6 @@
 
 #include "card.h"
 
-Card generateRandomCard(void) {
-    Card randomCard;
-
-    // Generate a random card value
-    randomCard.value = (CardValue)generateRandomNumber(1, 14);
-
-    // Generate a random suit
-    randomCard.suit = (Suit)generateRandomNumber(0, 4);
-
-    return randomCard;
-}
-
 void printCardVal(char* str, CardValue value) {
     // Adjust the array indices based on the CardValue enum
     if (value >= ACE && value <= KING) {

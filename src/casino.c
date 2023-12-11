@@ -15,6 +15,8 @@
 #include "casino.h"
 
 void initCasino(PmodOLEDrgb* oledStruct) {
+    randomizationInit();
+
     // Initialize input module
     initInput();
 
@@ -56,7 +58,7 @@ void startCasino() {
 
         int running = 1;
 
-        Balance userBalance = (const Balance){0};
+        Balance userBalance;
         initBalance(&userBalance);
 
         while (running) {
@@ -76,7 +78,6 @@ void startCasino() {
                 case '1':
                     // Cash in using the adminModBalance function
                     adminModBalance(&userBalance, POSITIVE);
-                    printlnUART("Cash In Successful.");
                     break;
                 case '2':
                     // Cash out
@@ -87,15 +88,14 @@ void startCasino() {
                     if (userBalance.balance == 0)
                     {
                         running = 0;
-                        printlnUART("Don't leave yet! You still have Chowncoin left!");
+                        printlnUART("Exiting Chownsino.");
                     }
                     else
                         printlnUART("Don't leave yet! You still have Chowncoin left!");
                     break;
                 case '4':
                     // View casino games
-                    // TODO: Implement viewGames function
-                    // viewGames();
+                    viewGames(userBalance, oledStruct);
                     break;
                 default:
                     printlnUART("Invalid choice. Please try again.");
@@ -108,4 +108,44 @@ void startCasino() {
     }
 
     cleanupCasino(&oledStruct);
+}
+
+void viewGames(Balance balance, PmodOLEDrgb oledStruct)
+{
+    int running = 1;
+
+    while (running) {
+        // Display options for the user
+        printlnUART("Options:");
+        printlnUART("1. Blackjack");
+        printlnUART("2. Roulette");
+        printlnUART("3. Video Poker");
+        printlnUART("4. Exit");
+        printlnUART("Enter your choice: ");
+
+        char choice = readKeypadInput();
+        while(choice == 0)
+            choice = readKeypadInput();
+
+        switch (choice) {
+            case '1':
+                playBlackjack(balance, oledStruct);
+                break;
+            case '2':
+                //TODO: implement
+                // playRoulette();
+                break;
+            case '3':
+                //TODO: implement
+                // playVPoker();
+                break;
+            case '4':
+                running = 0;
+                printlnUART("Exiting Chownsino.");
+                break;
+            default:
+                printlnUART("Invalid choice. Please try again.");
+                break;
+        }
+    }
 }

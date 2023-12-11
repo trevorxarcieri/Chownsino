@@ -39,9 +39,9 @@ void displayCard(PmodOLEDrgb* oledStruct, Card card, int centerPosition) {
     //TODO: change display to OLED
 
     // Display card value
-    char valueStr[3];  // Assuming the maximum length of the value is 2 characters
+    char valueStr[CARD_STR_LEN];  // Assuming the maximum length of the value is 2 characters
     printCardVal(valueStr, card.value);
-    printlnUART((uint8_t*)valueStr);
+    printUART((uint8_t*)valueStr);
 
     // Display card suit
     char suitStr[2];  // Assuming the maximum length of the suit is 1 character
@@ -62,7 +62,7 @@ void displayCard(PmodOLEDrgb* oledStruct, Card card, int centerPosition) {
             suitStr[0] = '?';
     }
     suitStr[1] = '\0';
-    printlnUART((uint8_t*)suitStr);
+    printUART((uint8_t*)suitStr);
 }
 
 void displayCards(PmodOLEDrgb* oledStruct, int numCards, int topLeftPosition, Card* cards) {

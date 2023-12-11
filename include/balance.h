@@ -31,6 +31,7 @@
 
 //Define admin balance add amount timeout as 10s
 #define ADMIN_AMT_TIMEOUT 10000
+#define MAX_TIMEOUT 0xFFFFFFFF
 
 //Define admin balance add max length as 9 digits
 #define MAX_AMT_LENGTH 9
@@ -49,6 +50,8 @@ void addToBalance(Balance* balance, int amount);
 void subtractFromBalance(Balance* balance, int amount);
 void adminModBalance(Balance* balance, Sign sign);
 unsigned int amtFromStr(char* str, int len);
+unsigned int getAmtNoTimeout(void);
+unsigned int getAmt(unsigned int startTicks, unsigned int timeout);
 void printBalance(Balance* balance);
 
 #endif /* BALANCE_H */

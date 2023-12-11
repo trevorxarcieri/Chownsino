@@ -42,6 +42,7 @@
         <itemPath>../include/bet.h</itemPath>
         <itemPath>../include/oled_images.h</itemPath>
         <itemPath>../include/output_wrapper.h</itemPath>
+        <itemPath>../include/blackjack.h</itemPath>
       </logicalFolder>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
@@ -75,6 +76,7 @@
         <itemPath>../lib/internal_lib/src/PmodOLEDrgb.c</itemPath>
         <itemPath>../lib/internal_lib/src/adc.c</itemPath>
         <itemPath>../src/output_wrapper.c</itemPath>
+        <itemPath>../src/blackjack.c</itemPath>
       </logicalFolder>
       <itemPath>../main.c</itemPath>
     </logicalFolder>
@@ -314,6 +316,7 @@
         <property key="ToolFirmwareOption.UseLatestFirmware" value="true"/>
         <property key="debugoptions.debug-startup" value="Use system settings"/>
         <property key="debugoptions.reset-behaviour" value="Use system settings"/>
+        <property key="firmware.download.all" value="false"/>
         <property key="lastid" value=""/>
         <property key="memories.bootflash" value="true"/>
         <property key="memories.configurationmemory" value="true"/>

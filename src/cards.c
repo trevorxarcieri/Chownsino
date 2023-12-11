@@ -44,7 +44,7 @@ void initCardSet(CardSet* cardSet, int numDecks, double shoeRatio)
     shuffleCardSet(cardSet);
 }
 
-Card pullTopCard(CardSet *cardSet, ShuffleStatus *shuffleStatus)
+void pullTopCard(Card *topCard, CardSet *cardSet, ShuffleStatus *shuffleStatus)
 {
     // Check if shuffle is needed
     if ((double)cardSet->cardsLeft / (double)(cardSet->numDecks * 52) <= cardSet->shoeRatio)
@@ -58,12 +58,10 @@ Card pullTopCard(CardSet *cardSet, ShuffleStatus *shuffleStatus)
     }
 
     // Pull the top card
-    Card topCard = cardSet->deck[--cardSet->cardsLeft];
+    *topCard = cardSet->deck[--cardSet->cardsLeft];
 
     // Move the pulled card to the discard pile
-    cardSet->discardPile[cardSet->cardsLeft] = topCard;
-
-    return topCard;
+    cardSet->discardPile[cardSet->cardsLeft] = *topCard;
 }
 
 void discardTopCard(CardSet *cardSet)
