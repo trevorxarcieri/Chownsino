@@ -28,7 +28,7 @@
 
 #define MAX_BJ_HAND 5
 
-void playBlackjack(Balance userBalance, PmodOLEDrgb oledStruct);
+void playBlackjack(Balance* userBalance, PmodOLEDrgb* oledStruct);
 
 void displayPlayerHand(PmodOLEDrgb* oledStruct, Card* cards, int numCards);
 void displayFullDealerHand(PmodOLEDrgb* oledStruct, Card* cards, int numCards);

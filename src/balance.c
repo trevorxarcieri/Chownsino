@@ -19,11 +19,15 @@ void initBalance(Balance* balance) {
     balance->balance = 0;
 }
 
-void addToBalance(Balance* balance, int amount) {
+void addToBalance(Balance* balance, unsigned int amount) {
     balance->balance += amount;
 }
 
-void subtractFromBalance(Balance* balance, int amount) {
+void subtractFromBalance(Balance* balance, unsigned int amount) {
+    if (amount > balance->balance)
+    {
+        balance->balance = 0;
+    }
     balance->balance -= amount;
 }
 
@@ -58,19 +62,30 @@ void adminModBalance(Balance* balance, Sign sign) {
             printUART(" user balance");
 
             // Read the amount input from the admin via keypad
-            unsigned int amountToAdd = (sign ? -1 : 1) * getAmt(getTicks(), ADMIN_AMT_TIMEOUT);
+            unsigned int amount = getAmt(ADMIN_AMT_TIMEOUT);
 
-            // Add the amount to the user balance
-            balance->balance += amountToAdd;
+            if(sign == POSITIVE)
+            {
+                addToBalance(balance, amount);
+            }
+            else
+            {
+                subtractFromBalance(balance, amount);
+            }
 
             // Display a message indicating successful admin balance addition
             printBalance(balance);
             return;
         }
+        
+        if(codeIndex == ADMIN_CODE_LENGTH)
+        {
+            break;
+        }
     }
 
     // Admin code entry timed out, return current balance
-    printlnUART("Admin: Admin code entry timed out. Access denied.");
+    printlnUART("Admin: Admin code entry failed. Access denied.");
 }
 
 unsigned int amtFromStr(char* str, int len)
@@ -86,16 +101,16 @@ unsigned int amtFromStr(char* str, int len)
 
 unsigned int getAmtNoTimeout()
 {
-    return getAmt(0, MAX_TIMEOUT);
+    return getAmt(MAX_TIMEOUT);
 }
 
-unsigned int getAmt(unsigned int startTicks, unsigned int timeout)
+unsigned int getAmt(unsigned int timeout)
 {
     printlnUART(" (type non-number to stop): "); 
     char amountStr[MAX_AMT_LENGTH + 1];
     unsigned int amtStart = getTicks();
     int amountIndex = 0;
-    while (getMsSince(startTicks) < timeout) {
+    while (getMsSince(amtStart) < timeout) {
         // Read keypad input
         char key = readKey();  // Replace with actual readKey function
         if (key != '\0') {
@@ -128,7 +143,7 @@ void printBalance(Balance* balance)
     printlnUART(" Chowncoin");
 }
 
-void printInt(int num, int digits)
+void printInt(unsigned int num, int digits)
 {
     char str[digits + 1];
     str[0] = '0';

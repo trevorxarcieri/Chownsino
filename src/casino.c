@@ -62,6 +62,7 @@ void startCasino() {
         initBalance(&userBalance);
 
         while (running) {
+            printBalance(&userBalance);
             // Display options for the user
             printlnUART("Options:");
             printlnUART("1. Cash In");
@@ -85,7 +86,7 @@ void startCasino() {
                     break;
                 case '3':
                     // View casino games
-                    viewGames(userBalance, oledStruct);
+                    viewGames(&userBalance, &oledStruct);
                     break;
                 case '4':
                     // Exit if the user balance is 0
@@ -110,7 +111,7 @@ void startCasino() {
     cleanupCasino(&oledStruct);
 }
 
-void viewGames(Balance balance, PmodOLEDrgb oledStruct)
+void viewGames(Balance* balance, PmodOLEDrgb* oledStruct)
 {
     int running = 1;
 
@@ -132,10 +133,10 @@ void viewGames(Balance balance, PmodOLEDrgb oledStruct)
                 playBlackjack(balance, oledStruct);
                 break;
             case '2':
-                playRoulette(&balance);
+                playRoulette(balance);
                 break;
             case '3':
-                playVideoPoker(&balance, &oledStruct);
+                playVideoPoker(balance, oledStruct);
                 break;
             case '4':
                 running = 0;

@@ -46,13 +46,13 @@ typedef struct {
 } Balance;
 
 void initBalance(Balance* balance);
-void addToBalance(Balance* balance, int amount);
-void subtractFromBalance(Balance* balance, int amount);
+void addToBalance(Balance* balance, unsigned int amount);
+void subtractFromBalance(Balance* balance, unsigned int amount);
 void adminModBalance(Balance* balance, Sign sign);
 unsigned int amtFromStr(char* str, int len);
 unsigned int getAmtNoTimeout(void);
-unsigned int getAmt(unsigned int startTicks, unsigned int timeout);
+unsigned int getAmt(unsigned int timeout);
 void printBalance(Balance* balance);
-void printInt(int num, int digits);
+void printInt(unsigned int num, int digits);
 
 #endif /* BALANCE_H */
