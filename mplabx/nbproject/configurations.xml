@@ -5,6 +5,9 @@
                    displayName="Header Files"
                    projectFiles="true">
       <logicalFolder name="include" displayName="include" projectFiles="true">
+        <logicalFolder name="include" displayName="include" projectFiles="true">
+          <itemPath>../include/roulette.h</itemPath>
+        </logicalFolder>
         <itemPath>../lib/internal_lib/include/time.h</itemPath>
         <itemPath>../lib/internal_lib/include/keypad1.h</itemPath>
         <itemPath>../lib/internal_lib/include/adc.h</itemPath>
@@ -77,6 +80,7 @@
         <itemPath>../lib/internal_lib/src/adc.c</itemPath>
         <itemPath>../src/output_wrapper.c</itemPath>
         <itemPath>../src/blackjack.c</itemPath>
+        <itemPath>../src/roulette.c</itemPath>
       </logicalFolder>
       <itemPath>../main.c</itemPath>
     </logicalFolder>

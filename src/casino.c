@@ -66,8 +66,8 @@ void startCasino() {
             printlnUART("Options:");
             printlnUART("1. Cash In");
             printlnUART("2. Cash Out");
-            printlnUART("3. Exit");
-            printlnUART("4. View Casino Games");
+            printlnUART("3. View Casino Games");
+            printlnUART("4. Exit");
             printlnUART("Enter your choice: ");
 
             char choice = readKeypadInput();
@@ -84,6 +84,10 @@ void startCasino() {
                     adminModBalance(&userBalance, NEGATIVE);
                     break;
                 case '3':
+                    // View casino games
+                    viewGames(userBalance, oledStruct);
+                    break;
+                case '4':
                     // Exit if the user balance is 0
                     if (userBalance.balance == 0)
                     {
@@ -92,10 +96,6 @@ void startCasino() {
                     }
                     else
                         printlnUART("Don't leave yet! You still have Chowncoin left!");
-                    break;
-                case '4':
-                    // View casino games
-                    viewGames(userBalance, oledStruct);
                     break;
                 default:
                     printlnUART("Invalid choice. Please try again.");
@@ -132,8 +132,7 @@ void viewGames(Balance balance, PmodOLEDrgb oledStruct)
                 playBlackjack(balance, oledStruct);
                 break;
             case '2':
-                //TODO: implement
-                // playRoulette();
+                playRoulette(&balance);
                 break;
             case '3':
                 //TODO: implement
@@ -141,7 +140,7 @@ void viewGames(Balance balance, PmodOLEDrgb oledStruct)
                 break;
             case '4':
                 running = 0;
-                printlnUART("Exiting Chownsino.");
+                printlnUART("Exiting games.");
                 break;
             default:
                 printlnUART("Invalid choice. Please try again.");

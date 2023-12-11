@@ -124,20 +124,24 @@ unsigned int getAmt(unsigned int startTicks, unsigned int timeout)
 void printBalance(Balance* balance)
 {
     printUART("Current user balance: ");
-    int balanceNum = balance->balance;
-    char str[MAX_AMT_LENGTH + 1];
+    printInt(balance->balance, MAX_AMT_LENGTH);
+    printlnUART(" Chowncoin");
+}
+
+void printInt(int num, int digits)
+{
+    char str[digits + 1];
     str[0] = '0';
     str[1] = '\0';
-    for(int i = 1; i < MAX_AMT_LENGTH + 1 && balanceNum != 0; i++)
+    for(int i = 1; i < digits + 1 && num != 0; i++)
     {
         for(int j = i; j > 0; j--)
         {
             str[j] = str[j - 1]; 
         }
-        str[0] = '0' + balanceNum % 10;
+        str[0] = '0' + num % 10;
         str[i] = '\0';
-        balanceNum /= 10;
+        num /= 10;
     }
     printUART(str);
-    printlnUART(" Chowncoin");
 }

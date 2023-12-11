@@ -53,5 +53,6 @@ unsigned int amtFromStr(char* str, int len);
 unsigned int getAmtNoTimeout(void);
 unsigned int getAmt(unsigned int startTicks, unsigned int timeout);
 void printBalance(Balance* balance);
+void printInt(int num, int digits);
 
 #endif /* BALANCE_H */

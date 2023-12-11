@@ -20,6 +20,7 @@
 #include "balance.h"
 #include "randomization.h"
 #include "blackjack.h"
+#include "roulette.h"
 
 void initCasino(PmodOLEDrgb* oledStruct);
 void cleanupCasino(PmodOLEDrgb* oledStruct);
