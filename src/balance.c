@@ -55,45 +55,16 @@ void adminModBalance(Balance* balance, Sign sign) {
                 printUART("add to");
             else
                 printUART("subtract from");
-            printlnUART(" user balance (type non-number to stop): ");
+            printUART(" user balance");
 
             // Read the amount input from the admin via keypad
-            char amountStr[MAX_AMT_LENGTH + 1];
-            unsigned int amtStart = getTicks();
-            int amountIndex = 0;
-            while (getMsSince(amtStart) < ADMIN_AMT_TIMEOUT) {
-                // Read keypad input
-                char key = readKey();  // Replace with actual readKey function
-                if (key != '\0') {
-                    // If admin enters non-number, break and stop requesting digits
-                    if (key > '9')
-                    {
-                        break;
-                    }
-
-                    // Update entered code with the pressed key
-                    if (amountIndex < MAX_AMT_LENGTH) {
-                        amountStr[amountIndex++] = key;
-                        amountStr[amountIndex] = '\0';  // Null-terminate the string
-                    }
-                }
-            }
-
-            unsigned int amountToAdd = (sign * -1) * amtFromStr(amountStr, amountIndex);
+            unsigned int amountToAdd = (sign ? -1 : 1) * getAmt(getTicks(), ADMIN_AMT_TIMEOUT);
 
             // Add the amount to the user balance
             balance->balance += amountToAdd;
 
             // Display a message indicating successful admin balance addition
-            printUART("Admin: ");
-            printUART(amountStr);
-            if(sign == POSITIVE)
-                printlnUART(" Chowncoin added successfully.");
-            else
-                printlnUART(" Chowncoin subtracted successfully.");
-            printUART("User balance is now ");
             printBalance(balance);
-            printlnUART(" Chowncoin.");
             return;
         }
     }
@@ -113,12 +84,50 @@ unsigned int amtFromStr(char* str, int len)
     return amount;
 }
 
+unsigned int getAmtNoTimeout()
+{
+    return getAmt(0, MAX_TIMEOUT);
+}
+
+unsigned int getAmt(unsigned int startTicks, unsigned int timeout)
+{
+    printlnUART(" (type non-number to stop): "); 
+    char amountStr[MAX_AMT_LENGTH + 1];
+    unsigned int amtStart = getTicks();
+    int amountIndex = 0;
+    while (getMsSince(startTicks) < timeout) {
+        // Read keypad input
+        char key = readKey();  // Replace with actual readKey function
+        if (key != '\0') {
+            // If admin enters non-number, break and stop requesting digits
+            if (key > '9')
+            {
+                break;
+            }
+
+            // Update entered code with the pressed key
+            if (amountIndex < MAX_AMT_LENGTH) {
+                amountStr[amountIndex++] = key;
+                amountStr[amountIndex] = '\0';  // Null-terminate the string
+            }
+        }
+
+        if(amountIndex == MAX_AMT_LENGTH)
+        {
+            break;
+        }
+    }
+
+    return amtFromStr(amountStr, amountIndex);
+}
+
 void printBalance(Balance* balance)
 {
+    printUART("Current user balance: ");
     int balanceNum = balance->balance;
     char str[MAX_AMT_LENGTH + 1];
-    str[0] = '\0';
-    str[1] = '0';
+    str[0] = '0';
+    str[1] = '\0';
     for(int i = 1; i < MAX_AMT_LENGTH + 1 && balanceNum != 0; i++)
     {
         for(int j = i; j > 0; j--)
@@ -126,7 +135,9 @@ void printBalance(Balance* balance)
             str[j] = str[j - 1]; 
         }
         str[0] = '0' + balanceNum % 10;
+        str[i] = '\0';
         balanceNum /= 10;
     }
     printUART(str);
+    printlnUART(" Chowncoin");
 }
