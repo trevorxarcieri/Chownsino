@@ -18,10 +18,13 @@
 #include "input_wrapper.h"
 #include "output_wrapper.h"
 #include "balance.h"
+#include "randomization.h"
+#include "blackjack.h"
 
 void initCasino(PmodOLEDrgb* oledStruct);
 void cleanupCasino(PmodOLEDrgb* oledStruct);
 int askUserAge(void);
 void startCasino();
+void viewGames(Balance balance, PmodOLEDrgb oledStruct);
 
 #endif /* CASINO_H */

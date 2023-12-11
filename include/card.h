@@ -19,6 +19,8 @@
 
 #include "randomization.h"
 
+#define CARD_STR_LEN 3
+
 typedef enum {
     HEARTS,
     DIAMONDS,
@@ -37,7 +39,6 @@ typedef struct {
     Suit suit;
 } Card;
 
-Card generateRandomCard(void);
 void printCardVal(char* str, CardValue value);
 
 #endif /* CARD_H */

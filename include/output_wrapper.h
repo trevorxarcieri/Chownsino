@@ -42,14 +42,14 @@ void displayCards(PmodOLEDrgb* oledStruct, int numCards, int topLeftPosition, Ca
 void displaySquare(PmodOLEDrgb* oledStruct, int x, int y, RouletteSquare square);
 void displaySquares(PmodOLEDrgb* oledStruct, int x, int y, int numSquares, RouletteSquare* squares);
 
-void displayOLEDText(PmodOLEDrgb* oledStruct, int x, int y, const char* text);
+void displayOLEDText(PmodOLEDrgb* oledStruct, int x, int y, unsigned char* text);
 void eraseOLEDText(PmodOLEDrgb* oledStruct, int x, int y, int length);
 
-void displayLCDText(int row, const char* text);
+void displayLCDText(int row, unsigned char* text);
 void eraseLCDText();
 
-void printlnUART(const char* text);
-void printUART(const char* text);
+void printlnUART(unsigned char *text);
+void printUART(unsigned char *text);
 
 void displayWin(/* Additional parameters as needed */);
 void displayLoss(/* Additional parameters as needed */);
