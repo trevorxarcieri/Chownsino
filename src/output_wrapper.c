@@ -41,7 +41,7 @@ void displayCard(PmodOLEDrgb* oledStruct, Card card, int centerPosition) {
     // Display card value
     char valueStr[3];  // Assuming the maximum length of the value is 2 characters
     printCardVal(valueStr, card.value);
-    UART4_putstr((uint8_t*)valueStr);
+    printlnUART((uint8_t*)valueStr);
 
     // Display card suit
     char suitStr[2];  // Assuming the maximum length of the suit is 1 character
@@ -62,7 +62,7 @@ void displayCard(PmodOLEDrgb* oledStruct, Card card, int centerPosition) {
             suitStr[0] = '?';
     }
     suitStr[1] = '\0';
-    UART4_putstr((uint8_t*)suitStr);
+    printlnUART((uint8_t*)suitStr);
 }
 
 void displayCards(PmodOLEDrgb* oledStruct, int numCards, int topLeftPosition, Card* cards) {

@@ -27,14 +27,14 @@ void subtractFromBalance(Balance* balance, int amount) {
     balance->balance -= amount;
 }
 
-void adminAddToBalance(Balance* balance) {
+void adminModBalance(Balance* balance, Sign sign) {
     char enteredCode[ADMIN_CODE_LENGTH + 1] = {0};
     unsigned int codeStart = getTicks();  // Assuming getTicks returns the current time in milliseconds
 
     int codeIndex = 0;
 
     // Request admin code entry via UART
-    UART4_putstr("Enter admin code: ");
+    printlnUART("Enter admin code: ");
 
     while (getMsSince(codeStart) < ADMIN_CODE_TIMEOUT) {
         // Read keypad input
@@ -50,7 +50,12 @@ void adminAddToBalance(Balance* balance) {
         // Check if the entered code matches the secret admin code
         if (strcmp(enteredCode, ADMIN_SECRET_CODE) == 0) {
             // Admin code matched, prompt for the amount to add
-            UART4_putstr("Enter amount to add to user balance (type non-number to stop): ");
+            printUART("Enter amount to ");
+            if(sign == POSITIVE)
+                printUART("add to");
+            else
+                printUART("subtract from");
+            printlnUART(" user balance (type non-number to stop): ");
 
             // Read the amount input from the admin via keypad
             char amountStr[MAX_AMT_LENGTH + 1];
@@ -74,19 +79,27 @@ void adminAddToBalance(Balance* balance) {
                 }
             }
 
-            unsigned int amountToAdd = amtFromStr(amountStr, amountIndex);
+            unsigned int amountToAdd = (sign * -1) * amtFromStr(amountStr, amountIndex);
 
             // Add the amount to the user balance
             balance->balance += amountToAdd;
 
             // Display a message indicating successful admin balance addition
-            UART4_putstr("Admin: Balance added successfully.\n");
+            printUART("Admin: ");
+            printUART(amountStr);
+            if(sign == POSITIVE)
+                printlnUART(" Chowncoin added successfully.");
+            else
+                printlnUART(" Chowncoin subtracted successfully.");
+            printUART("User balance is now ");
+            printBalance(balance);
+            printlnUART(" Chowncoin.");
             return;
         }
     }
 
     // Admin code entry timed out, return current balance
-    UART4_putstr("Admin: Admin code entry timed out. Access denied.\n");
+    printlnUART("Admin: Admin code entry timed out. Access denied.");
 }
 
 unsigned int amtFromStr(char* str, int len)
@@ -100,3 +113,20 @@ unsigned int amtFromStr(char* str, int len)
     return amount;
 }
 
+void printBalance(Balance* balance)
+{
+    int balanceNum = balance->balance;
+    char str[MAX_AMT_LENGTH + 1];
+    str[0] = '\0';
+    str[1] = '0';
+    for(int i = 1; i < MAX_AMT_LENGTH + 1 && balanceNum != 0; i++)
+    {
+        for(int j = i; j > 0; j--)
+        {
+            str[j] = str[j - 1]; 
+        }
+        str[0] = '0' + balanceNum % 10;
+        balanceNum /= 10;
+    }
+    printUART(str);
+}

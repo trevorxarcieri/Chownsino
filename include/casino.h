@@ -17,6 +17,7 @@
 
 #include "input_wrapper.h"
 #include "output_wrapper.h"
+#include "balance.h"
 
 void initCasino(PmodOLEDrgb* oledStruct);
 void cleanupCasino(PmodOLEDrgb* oledStruct);

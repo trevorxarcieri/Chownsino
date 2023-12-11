@@ -19,7 +19,7 @@
 #include <stdio.h>
 #include "keypad1.h"
 #include "time.h"
-#include "uart.h"
+#include "output_wrapper.h"
 
 #define ADMIN_SECRET_CODE "123456"
 
@@ -35,14 +35,20 @@
 //Define admin balance add max length as 9 digits
 #define MAX_AMT_LENGTH 9
 
+typedef enum {
+  POSITIVE,
+  NEGATIVE
+} Sign;
+
 typedef struct {
     unsigned int balance;
 } Balance;
 
-void createBalance(Balance* balance);
+void initBalance(Balance* balance);
 void addToBalance(Balance* balance, int amount);
 void subtractFromBalance(Balance* balance, int amount);
-void adminAddToBalance(Balance* balance);
+void adminModBalance(Balance* balance, Sign sign);
 unsigned int amtFromStr(char* str, int len);
+void printBalance(Balance* balance);
 
 #endif /* BALANCE_H */

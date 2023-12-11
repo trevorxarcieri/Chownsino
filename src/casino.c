@@ -31,14 +31,14 @@ void cleanupCasino(PmodOLEDrgb* oledStruct) {
 
 // Function to ask the user if they are over 21 using UART
 int askUserAge() {
-    UART4_putstr("Are you over 21? Press 'Y' for Yes, 'N' for No: ");
+    printlnUART("Are you over 21? Press 'A' for Yes, 'B' for No.");
 
     while (1) {
         char userInput = readKey();
 
-        if (userInput == 'Y' || userInput == 'y') {
+        if (userInput == 'A') {
             return 1;  // User is over 21
-        } else if (userInput == 'N' || userInput == 'n') {
+        } else if (userInput == 'B') {
             return 0;  // User is not over 21
         }
     }
@@ -53,41 +53,39 @@ void startCasino() {
 
     if (isOver21) {
         // User is over 21, continue with casino activities
-        UART4_putstr("Welcome to the casino entrance!\n");
+        printlnUART("Welcome to the casino entrance!");
 
-        while (1) {
+        int running = 1;
+
+        Balance *userBalance;
+        initBalance(userBalance);
+
+        while (running) {
             // Display options for the user
-            UART4_putstr("Options:\n");
-            UART4_putstr("1. Cash In\n");
-            UART4_putstr("2. Cash Out\n");
-            UART4_putstr("3. Exit\n");
-            UART4_putstr("4. View Casino Games\n");
-            UART4_putstr("Enter your choice: ");
+            printlnUART("Options:");
+            printlnUART("1. Cash In");
+            printlnUART("2. Cash Out");
+            printlnUART("3. Exit");
+            printlnUART("4. View Casino Games");
+            printlnUART("Enter your choice: ");
 
             char choice = readKey();
 
             switch (choice) {
                 case '1':
-                    // Cash in using the adminAddToBalance function
-                    // Note: You need to implement the adminAddToBalance function based on your requirements
-                    // For simplicity, assume the function returns the updated user balance
-                    // Example: userBalance = adminAddToBalance(&userBalance, amount, adminCode);
-                    // Display the updated user balance
-                    UART4_putstr("Cash In Successful. Updated User Balance: ");
-                    // TODO: Implement printUserBalance function
-                    // printUserBalance(userBalance);
+                    // Cash in using the adminModBalance function
+                    adminModBalance(userBalance, POSITIVE);
+                    printlnUART("Cash In Successful.");
                     break;
                 case '2':
                     // Cash out
-                    // TODO: Implement cashOut function
-                    // cashOut(&userBalance);
+                    adminModBalance(userBalance, NEGATIVE);
                     break;
                 case '3':
                     // Exit if the user balance is 0
-                    // TODO: Implement exit function
-                    // if (userBalance == 0) {
-                    //     exitCasino();
-                    // }
+                    if (userBalance == 0) {
+                        running = 0;
+                    }
                     break;
                 case '4':
                     // View casino games
@@ -95,13 +93,13 @@ void startCasino() {
                     // viewGames();
                     break;
                 default:
-                    UART4_putstr("Invalid choice. Please try again.\n");
+                    printlnUART("Invalid choice. Please try again.");
                     break;
             }
         }
     } else {
         // User is not over 21, exit
-        UART4_putstr("Exiting. You must be over 21 to enter the casino.\n");
+        printlnUART("Exiting. You must be over 21 to enter the casino.");
     }
 
     cleanupCasino(&oledStruct);
